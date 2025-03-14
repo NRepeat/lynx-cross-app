@@ -11,6 +11,9 @@
 
     "esModuleInterop": true,
     "skipLibCheck": true,
+    "paths": {
+      "@common/*": ["./src/common/*"]
+    }
   },
   "exclude": ["dist/"],
 }
