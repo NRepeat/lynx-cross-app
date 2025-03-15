@@ -4,13 +4,13 @@ import { calculateEstimatedSize } from '../utils/utils.jsx';
 import ImageCard from './ImageCard.jsx';
 import { useQuery } from '@tanstack/react-query';
 const WorkoutsList = () => {
-  const query = useQuery({
-    queryKey: ['wods'],
-    queryFn: (key) =>
-      fetch(
-        'https://fd4cxoelmw7qd2ujkx4cdoesvu.srv.us/api/admin/workouts?limit=125&page=1',
-      ).then((res) => res.json()),
-  });
+  // const query = useQuery({
+  //   queryKey: ['wods'],
+  //   queryFn: (key) =>
+  //     fetch(
+  //       'https://fd4cxoelmw7qd2ujkx4cdoesvu.srv.us/api/admin/workouts?limit=125&page=1',
+  //     ).then((res) => res.json()),
+  // });
 
   return (
     <view className="gallery-wrapper">
