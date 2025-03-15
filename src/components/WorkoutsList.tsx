@@ -1,40 +1,42 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import React from 'react';
-
+// import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useEffect, useState } from '@lynx-js/react/legacy-react-runtime';
+import { calculateEstimatedSize } from '../utils/utils.jsx';
+import ImageCard from './ImageCard.jsx';
+import { useQuery } from '@tanstack/react-query';
 const WorkoutsList = () => {
-  // Access the client
-  const queryClient = useQueryClient();
-
-  // Queries
   const query = useQuery({
-    queryKey: ['todos'],
+    queryKey: ['wods'],
     queryFn: (key) =>
-      fetch('https://jsonplaceholder.typicode.com/albums/1/photos').then(
-        (res) => res.json(),
-      ),
+      fetch(
+        'https://fd4cxoelmw7qd2ujkx4cdoesvu.srv.us/api/admin/workouts?limit=125&page=1',
+      ).then((res) => res.json()),
   });
+
   return (
-    <scroll-view
-      // className="mt-10"
-      scroll-orientation="vertical"
-      style={{
-        width: '100%',
-        height: '100%',
-        paddingLeft: '10px',
-        marginLeft: '5px',
-      }}
-    >
-      {query.data &&
-        query.data
-          ?.slice(0, 100)
-          .map((item: any, index: number) => (
-            <VerticalScrollItem
-              index={index}
-              text={item.title}
-              image={item.url}
-            />
+    <view className="gallery-wrapper">
+      <list
+        className="list"
+        list-type="waterfall"
+        column-count={2}
+        scroll-orientation="vertical"
+        custom-list-name="list-container"
+      >
+        {query.data &&
+          query.data.wods &&
+          query.data.wods.map((item: any, index: number) => (
+            <list-item
+              // estimated-main-axis-size-px={calculateEstimatedSize(150, 150)}
+              item-key={'' + index}
+              key={'' + index}
+            >
+              <ImageCard
+                picture={item.thumbnail && item.thumbnail}
+                text={item.workout}
+              />
+            </list-item>
           ))}
-    </scroll-view>
+      </list>
+    </view>
   );
 };
 

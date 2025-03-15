@@ -17,35 +17,37 @@ import { calculateEstimatedSize } from './utils/utils.jsx';
 
 export function App() {
   const pictureData = furnituresPictures;
-  console.log("🚀 ~ App ~ pictureData:", pictureData)
   useEffect(() => {
     console.info('Hello, ReactLynx');
   }, []);
 
   return (
-    <page>
-      <view className="gallery-wrapper">
-        <list
-          className="list"
-          list-type="waterfall"
-          column-count={2}
-          scroll-orientation="vertical"
-          custom-list-name="list-container"
-        >
-          {pictureData.map((picture: Picture, index: number) => (
-            <list-item
-              estimated-main-axis-size-px={calculateEstimatedSize(
-                picture.width,
-                picture.height,
-              )}
-              item-key={'' + index}
-              key={'' + index}
-            >
-              <ImageCard picture={picture} />
-            </list-item>
-          ))}
-        </list>
-      </view>
-    </page>
+    <QueryClientProvider client={new QueryClient()}>
+      <page>
+        <WorkoutsList />
+        {/* <view className="gallery-wrapper">
+          <list
+            className="list"
+            list-type="waterfall"
+            column-count={2}
+            scroll-orientation="vertical"
+            custom-list-name="list-container"
+          >
+            {pictureData.map((picture: Picture, index: number) => (
+              <list-item
+                estimated-main-axis-size-px={calculateEstimatedSize(
+                  picture.width,
+                  picture.height,
+                )}
+                item-key={'' + index}
+                key={'' + index}
+              >
+                <ImageCard picture={picture} text="asd" />
+              </list-item>
+            ))}
+          </list>
+        </view> */}
+      </page>
+    </QueryClientProvider>
   );
 }
