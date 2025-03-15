@@ -2,12 +2,13 @@ import { root } from '@lynx-js/react';
 import { MemoryRouter, Routes, Route } from 'react-router';
 
 import { App } from './App.jsx';
+import Home from './components/Home/Home.jsx';
 
 root.render(
   <MemoryRouter>
     <Routes>
-      <Route path="/" element={<App />} />
-      <Route path="/home" element={<page>test</page>} />
+      <Route path="/" element={<Home />} />
+      <Route path="/home" element={<App />} />
     </Routes>
   </MemoryRouter>,
 );
