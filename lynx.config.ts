@@ -3,6 +3,16 @@ import { pluginQRCode } from '@lynx-js/qrcode-rsbuild-plugin'
 import { pluginReactLynx } from '@lynx-js/react-rsbuild-plugin'
 import { pluginTailwindCSS } from 'rsbuild-plugin-tailwindcss'
 export default defineConfig({
+    dev:{
+      assetPrefix:"http://192.168.0.100:3000/assets/",
+      
+    },
+    server:{ 
+      port: 3000,
+      host: '0.0.0.0',
+      headers: {
+        'Access-Control-Allow-Origin': '*',}
+    },
   plugins: [
     pluginTailwindCSS({
       config: './tailwind.config.js',
@@ -11,7 +21,6 @@ export default defineConfig({
     }),
     pluginQRCode({
       schema(url) {
-        // We use `?fullscreen=true` to open the page in LynxExplorer in full screen mode
         return `${url}?fullscreen=true`
       },
     }),

@@ -17,11 +17,11 @@ import { calculateEstimatedSize } from './utils/utils.jsx';
 
 export function App() {
   const pictureData = furnituresPictures;
+  console.log("🚀 ~ App ~ pictureData:", pictureData)
   useEffect(() => {
     console.info('Hello, ReactLynx');
   }, []);
 
-  const MyFirstPicture = furnituresPictures[0];
   return (
     <page>
       <view className="gallery-wrapper">
