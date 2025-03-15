@@ -8,8 +8,11 @@ function SwiperItem({
   itemWidth: number;
   text: string;
 }) {
+  function removeAsterisks(text: string): string {
+    return text.replace(/\*/g, '');
+  }
   return (
-    <view style={{ width: `${itemWidth}px`, minHeight: `400px` }}>
+    <view style={{ width: `${itemWidth}px`, minHeight: `100%` }}>
       {/* <image
         mode="aspectFill"
         src={pic}
@@ -26,7 +29,7 @@ function SwiperItem({
           textOverflow: 'ellipsis',
         }}
       >
-        {text}
+        {removeAsterisks(text)}
       </text>
     </view>
   );

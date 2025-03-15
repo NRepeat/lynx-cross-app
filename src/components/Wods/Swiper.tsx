@@ -45,13 +45,16 @@ export function Swiper({
         main-thread:bindtouchmove={handleTouchMove}
         main-thread:bindtouchend={handleTouchEnd}
       >
-        {data.map((item) => (
-          <SwiperItem
-            pic={item.thumbnail}
-            itemWidth={itemWidth}
-            text={item.workout}
-          />
-        ))}
+        {data.map(
+          (item) =>
+            item.workout && (
+              <SwiperItem
+                pic={item.thumbnail}
+                itemWidth={itemWidth}
+                text={item.workout}
+              />
+            ),
+        )}
       </view>
     </view>
   );
