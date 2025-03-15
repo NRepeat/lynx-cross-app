@@ -1,53 +1,45 @@
-import { useCallback, useEffect, useState } from '@lynx-js/react';
+import { useCallback, useEffect, useState } from '@lynx-js/react'
 
-import './App.css';
-import arrow from './assets/arrow.png';
-import lynxLogo from './assets/lynx-logo.png';
-import reactLynxLogo from './assets/react-logo.png';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import WorkoutsList, {
-  VerticalScrollItem,
-} from './components/WorkoutsList.jsx';
-import ImageCard from './components/ImageCard.jsx';
-import {
-  furnituresPictures,
-  type Picture,
-} from './Pictures/furnitures/furnituresPictures.jsx';
-import { calculateEstimatedSize } from './utils/utils.jsx';
+import './App.css'
+import arrow from './assets/arrow.png'
+import lynxLogo from './assets/lynx-logo.png'
+import reactLynxLogo from './assets/react-logo.png'
 
 export function App() {
-  const pictureData = furnituresPictures;
+  const [alterLogo, setAlterLogo] = useState(false)
+
   useEffect(() => {
-    console.info('Hello, ReactLynx');
-  }, []);
+    console.info('Hello, ReactLynx')
+  }, [])
+
+  const onTap = useCallback(() => {
+    'background only'
+    setAlterLogo(!alterLogo)
+  }, [alterLogo])
 
   return (
-    <QueryClientProvider client={new QueryClient()}>
-      <page>
-        <WorkoutsList />
-        {/* <view className="gallery-wrapper">
-          <list
-            className="list"
-            list-type="waterfall"
-            column-count={2}
-            scroll-orientation="vertical"
-            custom-list-name="list-container"
-          >
-            {pictureData.map((picture: Picture, index: number) => (
-              <list-item
-                estimated-main-axis-size-px={calculateEstimatedSize(
-                  picture.width,
-                  picture.height,
-                )}
-                item-key={'' + index}
-                key={'' + index}
-              >
-                <ImageCard picture={picture} text="asd" />
-              </list-item>
-            ))}
-          </list>
-        </view> */}
-      </page>
-    </QueryClientProvider>
-  );
+    <view>
+      <view className='Background' />
+      <view className='App'>
+        <view className='Banner'>
+          <view className='Logo' bindtap={onTap}>
+            {alterLogo
+              ? <image src={reactLynxLogo} className='Logo--react' />
+              : <image src={lynxLogo} className='Logo--lynx' />}
+          </view>
+          <text className='Title'>React</text>
+          <text className='Subtitle'>on Lynx</text>
+        </view>
+        <view className='Content'>
+          <image src={arrow} className='Arrow' />
+          <text className='Description'>Tap the logo and have fun!</text>
+          <text className='Hint'>
+            Edit<text style={{ fontStyle: 'italic' }}>{' src/App.tsx '}</text>
+            to see updates!
+          </text>
+        </view>
+        <view style={{ flex: 1 }}></view>
+      </view>
+    </view>
+  )
 }
