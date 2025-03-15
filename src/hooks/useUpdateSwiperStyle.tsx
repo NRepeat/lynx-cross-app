@@ -1,15 +1,14 @@
-import { useRef } from '@lynx-js/react';
-import type { NodesRef } from '@lynx-js/types';
+import { useMainThreadRef } from '@lynx-js/react';
+import type { MainThread } from '@lynx-js/types';
 
 export function useUpdateSwiperStyle() {
-  const containerRef = useRef<NodesRef>(null);
+  const containerRef = useMainThreadRef<MainThread.Element>(null);
 
   function updateSwiperStyle(offset: number) {
-    containerRef.current
-      ?.setNativeProps({
-        transform: `translateX(${offset}px)`,
-      })
-      .exec();
+    'main thread';
+    containerRef.current?.setStyleProperties({
+      transform: `translateX(${offset}px)`,
+    });
   }
 
   return {

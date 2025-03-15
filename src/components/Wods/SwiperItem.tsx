@@ -1,5 +1,7 @@
+import ReactMarkdown from 'react-markdown';
 function SwiperItem({
   pic,
+  text,
   itemWidth,
 }: {
   pic: string;
@@ -7,12 +9,25 @@ function SwiperItem({
   text: string;
 }) {
   return (
-    <view style={{ width: `${itemWidth}px`, minHeight: `100%` }}>
-      <image
+    <view style={{ width: `${itemWidth}px`, minHeight: `400px` }}>
+      {/* <image
         mode="aspectFill"
         src={pic}
         style={{ width: '100%', minHeight: `200px` }}
-      ></image>
+      ></image> */}
+
+      <text
+        style={{
+          fontSize: '20px',
+          color: '#ffffff',
+          padding: '10px',
+          display: 'block',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+        }}
+      >
+        {text}
+      </text>
     </view>
   );
 }

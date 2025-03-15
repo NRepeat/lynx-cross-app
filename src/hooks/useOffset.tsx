@@ -1,39 +1,92 @@
-import { useRef } from '@lynx-js/react';
-import type { TouchEvent } from '@lynx-js/types';
+import {
+  runOnBackground,
+  runOnMainThread,
+  useMainThreadRef,
+} from '@lynx-js/react';
+import type { MainThread } from '@lynx-js/types';
+import { useAnimate } from './useAnimate.jsx';
 
 export function useOffset({
   onOffsetUpdate,
+  onIndexUpdate,
+  itemWidth,
+  dataLength,
+  duration,
+  MTEasing,
 }: {
   onOffsetUpdate: (offset: number) => void;
+  onIndexUpdate: (index: number) => void;
+  itemWidth: number;
+  dataLength: number;
+  duration?: number;
+  MTEasing?: (t: number) => number;
 }) {
-  const touchStartXRef = useRef<number>(0);
-  const touchStartCurrentOffsetRef = useRef<number>(0);
-  const currentOffsetRef = useRef<number>(0);
+  const touchStartXRef = useMainThreadRef<number>(0);
+  const touchStartCurrentOffsetRef = useMainThreadRef<number>(0);
+  const currentOffsetRef = useMainThreadRef<number>(0);
+  const currentIndexRef = useMainThreadRef<number>(0);
+  const { animate, cancel: cancelAnimate } = useAnimate();
+  function updateIndex(index: number) {
+    const offset = index * itemWidth;
+    runOnMainThread(updateOffset)(offset);
+  }
+
+  function calcNearestPage(offset: number) {
+    'main thread';
+    const nearestPage = Math.round(offset / itemWidth);
+    return nearestPage * itemWidth;
+  }
 
   function updateOffset(offset: number) {
-    currentOffsetRef.current = offset;
-    onOffsetUpdate(offset);
+    'main thread';
+
+    const lowerBound = 0;
+    const upperBound = -(dataLength - 1) * itemWidth;
+
+    const realOffset = Math.min(lowerBound, Math.max(upperBound, offset));
+    currentOffsetRef.current = realOffset;
+    onOffsetUpdate(realOffset);
+    const index = Math.round(-realOffset / itemWidth);
+    if (currentIndexRef.current !== index) {
+      currentIndexRef.current = index;
+      runOnBackground(onIndexUpdate)(index);
+    }
   }
 
-  function handleTouchStart(e: TouchEvent) {
+  function handleTouchStart(e: MainThread.TouchEvent) {
+    'main thread';
     touchStartXRef.current = e.touches[0].clientX;
     touchStartCurrentOffsetRef.current = currentOffsetRef.current;
+    cancelAnimate();
   }
 
-  function handleTouchMove(e: TouchEvent) {
-    const delta = e.touches[0].clientX - touchStartXRef.current;
-    const offset = touchStartCurrentOffsetRef.current + delta;
-    updateOffset(offset);
+  function handleTouchMove(e: MainThread.TouchEvent) {
+    'main thread';
+    const touchMoveX = e.touches[0].clientX;
+    const deltaX = touchMoveX - touchStartXRef.current;
+    updateOffset(touchStartCurrentOffsetRef.current + deltaX);
   }
 
-  function handleTouchEnd(e: TouchEvent) {
+  function handleTouchEnd(e: MainThread.TouchEvent) {
+    'main thread';
     touchStartXRef.current = 0;
     touchStartCurrentOffsetRef.current = 0;
+    animate({
+      from: currentOffsetRef.current,
+      to: calcNearestPage(currentOffsetRef.current),
+      onUpdate: (offset: number) => {
+        'main thread';
+        updateOffset(offset);
+      },
+      duration,
+      easing: MTEasing,
+    });
   }
 
   return {
     handleTouchStart,
     handleTouchMove,
     handleTouchEnd,
+    updateIndex,
   };
 }

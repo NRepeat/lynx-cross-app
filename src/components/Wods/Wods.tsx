@@ -21,7 +21,11 @@ const Wods = () => {
   const data: { thumbnail: string; workout: string }[] =
     wods && (wods as { thumbnail: string; workout: string }[]);
   console.log('🚀 ~ Wods ~ data:', data);
+  const easing = (x: number) => {
+    'main thread';
 
+    return x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2;
+  };
   //   const getWods = async () => {
   //     const response = await fetch(
   //       'https://fd4cxoelmw7qd2ujkx4cdoesvu.srv.us/api/admin/workouts?limit=12&page=1',
@@ -36,7 +40,11 @@ const Wods = () => {
 
   return (
     <view className="page">
-      <view className="wods">{wods && <Swiper data={data} />}</view>
+      <view className="wods">
+        {wods && (
+          <Swiper data={data} main-thread:easing={easing} duration={300} />
+        )}
+      </view>
     </view>
   );
 };
