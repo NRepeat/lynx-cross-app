@@ -2,48 +2,113 @@ import React, { useEffect } from 'react';
 import './style.css';
 import { Swiper } from './Swiper.jsx';
 import { useQuery } from '@tanstack/react-query';
+export type StageType = 'Opens' | 'Semifinals' | 'Games';
+export type WodType = 'AMRAP' | 'For Time' | 'EMOM' | 'Tabata';
+export type WorkoutDifficultyType = "Rx'd" | 'Scaled' | 'Foundations';
+export type GenderType = 'men' | 'women';
+export type WorkoutVariablesType<
+  T extends GenderType,
+  U extends WorkoutDifficultyType,
+> = Record<string, string>;
+
+export type WorkoutType<
+  T extends GenderType,
+  U extends WorkoutDifficultyType,
+> = {
+  title: string;
+  subTitle: string;
+  wodType: WodType;
+  workoutTemplate: string;
+  variables: Record<T, Record<U, WorkoutVariablesType<T, U>>>;
+  details: {
+    gender: T;
+    difficulty: U;
+  };
+};
 const Wods = () => {
-  const [wods, setWods] = React.useState<
-    { thumbnail: string; workout: string }[]
-  >([]);
-  const query = useQuery({
-    queryKey: ['wods'],
-    queryFn: async (key) =>
-      fetch(
-        'https://fd4cxoelmw7qd2ujkx4cdoesvu.srv.us/api/admin/workouts?limit=12&page=1',
-      ).then(async (res) => {
-        const data = await res.json();
-        setWods(data.wods);
-        return data;
-      }),
+  // const [wods, setWods] = React.useState<
+  //   { thumbnail: string; workout: string }[]
+  // >([]);
+
+  const womenRxWorkout: WorkoutType<'women', "Rx'd">[] = [
+    {
+      title: 'WOD 2',
+      subTitle: 'CrossFit Open',
+      details: {
+        gender: 'women',
+        difficulty: "Rx'd",
+      },
+      wodType: 'AMRAP',
+      workoutTemplate: '{thrusters} Thrusters, {doubleUnders} Double-unders',
+      variables: {
+        women: { "Rx'd": { thrusters: '95', doubleUnders: '100' } },
+      },
+    },
+    {
+      title: 'WOD 1',
+      subTitle: 'CrossFit Open',
+      details: {
+        gender: 'women',
+        difficulty: "Rx'd",
+      },
+      wodType: 'AMRAP',
+      workoutTemplate: '{thrusters} Thrusters, {doubleUnders} Double-unders',
+      variables: {
+        women: { "Rx'd": { thrusters: '95', doubleUnders: '100' } },
+      },
+    },
+  ];
+
+  const menRxWorkout: WorkoutType<'men', "Rx'd">[] = [
+    {
+      title: 'WOD 2',
+      subTitle: 'CrossFit Open',
+      details: {
+        gender: 'men',
+        difficulty: "Rx'd",
+      },
+      wodType: 'AMRAP',
+      workoutTemplate: '{thrusters} Thrusters, {doubleUnders} Double-unders',
+      variables: {
+        men: { "Rx'd": { thrusters: '295', doubleUnders: '2100' } },
+      },
+    },
+    {
+      title: 'WOD 1',
+      subTitle: 'CrossFit Open',
+      details: {
+        gender: 'men',
+        difficulty: "Rx'd",
+      },
+      wodType: 'AMRAP',
+      workoutTemplate: '{thrusters} Thrusters, {doubleUnders} Double-unders',
+      variables: {
+        men: { "Rx'd": { thrusters: '195', doubleUnders: '1100' } },
+      },
+    },
+  ];
+  console.log('🚀 ~ Wods ~ menRxWorkout:', menRxWorkout);
+  const wods = [...womenRxWorkout, ...menRxWorkout];
+  const slides = [
+    { title: 'WOD 1', subTitle: 'CrossFit Open' },
+    { title: 'WOD 2', subTitle: 'CrossFit Open' },
+  ];
+  const swiperData = slides.map((slide) => {
+    return {
+      title: slide.title,
+      workout: wods.filter((wod) => wod.title === slide.title),
+    };
   });
-  console.log('🚀 ~ Wods ~ query.data:', query.error);
-  const data: { thumbnail: string; workout: string }[] =
-    wods && (wods as { thumbnail: string; workout: string }[]);
-  console.log('🚀 ~ Wods ~ data:', data);
+  console.log('🚀 ~ swiperData ~ swiperData :', swiperData);
   const easing = (x: number) => {
     'main thread';
-
     return x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2;
   };
-  //   const getWods = async () => {
-  //     const response = await fetch(
-  //       'https://fd4cxoelmw7qd2ujkx4cdoesvu.srv.us/api/admin/workouts?limit=12&page=1',
-  //     );
-  //     const data = await response.json();
-  //     console.log('🚀 ~ getWods ~ data:', data);
-  //     return data;
-  //   };
-  //   useEffect(() => {
-  //     getWods();
-  //   }, []);
 
   return (
     <view className="page">
       <view className="wods">
-        {wods && (
-          <Swiper data={data} main-thread:easing={easing} duration={300} />
-        )}
+        <Swiper data={swiperData} main-thread:easing={easing} duration={300} />
       </view>
     </view>
   );

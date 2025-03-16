@@ -23,17 +23,27 @@ const Header = () => {
     nav('/');
   };
   return (
-    <view className="header ">
-      {title !== 'Home' ? (
-        <Icon className="header-back" bindtap={handleBack} src={chevronLeft} />
+    <>
+      {title === 'Wods' ? (
+        <></>
       ) : (
-        <view style={{ width: '24px' }} />
+        <view className="header ">
+          {title !== 'Home' ? (
+            <Icon
+              className="header-back"
+              bindtap={handleBack}
+              src={chevronLeft}
+            />
+          ) : (
+            <view style={{ width: '24px' }} />
+          )}
+          <text bindtap={handleHome} className="header__title">
+            {title}
+          </text>
+          <Icon className="header-user" src={user} />
+        </view>
       )}
-      <text bindtap={handleHome} className="header__title">
-        {title}
-      </text>
-      <Icon className="header-user" src={user} />
-    </view>
+    </>
   );
 };
 

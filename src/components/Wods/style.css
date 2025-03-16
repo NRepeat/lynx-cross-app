@@ -18,6 +18,27 @@
   
   .swiper-item {
     display: flex;
-    align-items: flex-end;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 1.5rem;
+    min-height: var(--header-height);
     justify-content: center;
+    padding: calc(var(--header-height) - 1rem)  2rem 1.5rem 2rem ;
+    background-color: var(--color-primary);
+    border-bottom-right-radius: calc(var(--radius-box) + 1rem);
+    border-bottom-left-radius:  calc(var(--radius-box) + 1rem);
   }
+  .swiper-item > .title{
+    color: var(--color-primary-content);
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-align: left;
+  }
+  .workout-component{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* background-color: var(--color-primary); */
+    color: var(--color-primary-content);
+  }
+  

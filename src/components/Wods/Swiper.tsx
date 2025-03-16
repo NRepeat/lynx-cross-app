@@ -4,6 +4,11 @@ import type { NodesRef, TouchEvent } from '@lynx-js/types';
 import { SwiperItem } from './SwiperItem.jsx';
 import { useUpdateSwiperStyle } from '../../hooks/useUpdateSwiperStyle.jsx';
 import { useOffset } from '../../hooks/useOffset.jsx';
+import type { WorkoutType } from './Wods.jsx';
+
+export type SlideWorkoutType =
+  | WorkoutType<'women', "Rx'd">
+  | WorkoutType<'men', "Rx'd">;
 
 export function Swiper({
   data,
@@ -12,8 +17,8 @@ export function Swiper({
   'main-thread:easing': MTEasing,
 }: {
   data: {
-    thumbnail: string;
-    workout: string;
+    title: string;
+    workout: SlideWorkoutType[];
   }[];
   itemWidth?: number;
   duration?: number;
@@ -49,9 +54,10 @@ export function Swiper({
           (item) =>
             item.workout && (
               <SwiperItem
-                pic={item.thumbnail}
+                title={item.title}
+                pic={item.title}
                 itemWidth={itemWidth}
-                text={item.workout}
+                workout={item.workout}
               />
             ),
         )}
