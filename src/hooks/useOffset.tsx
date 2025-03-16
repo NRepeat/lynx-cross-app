@@ -102,14 +102,31 @@ export function useOffset({
           const nextIndex = currentItemIndex + 1;
           if (nextIndex < allItems.length) {
             const nextItem = allItems[nextIndex];
-            nextItem.setStyleProperties({
-              opacity: '1',
-              transform: `translateY(0)`,
+
+            animate({
+              from: 0, // Начинаем анимацию с progress = 0
+              to: 1, // Заканчиваем с progress = 1
+              onUpdate: (progress: number) => {
+                const inverseProgress = 1 - progress; // Инверсия прогресса для translateY
+                const opacityValue = 0.8 + 0.2 * progress; // Анимация opacity от 0.8 к 1
+                const baseScale = (20 - nextIndex) / 20; // Базовое значение scale
+                const scaleValue = Math.min(1, baseScale + 0.2 * progress); // Ограничиваем 1
+                // Анимация scale от 0.8 к 1
+                console.log('🚀 ~ onComplete ~ scaleValue:', scaleValue);
+                const translateYValue = 10 * nextIndex * inverseProgress; // В начале max, в конце 0
+
+                nextItem.setStyleProperties({
+                  opacity: `${opacityValue}`,
+                  transform: `scale(${scaleValue}) translateY(${translateYValue}px)`,
+                });
+              },
+              duration: 600,
+              easing: MTEasing,
             });
           }
         }
       },
-      duration,
+      duration: 300,
       easing: MTEasing,
     });
 
