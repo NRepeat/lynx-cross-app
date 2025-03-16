@@ -8,6 +8,7 @@ export function useUpdateSwiperStyle() {
     'main thread';
     containerRef.current?.setStyleProperties({
       transform: `translateX(${offset}px)`,
+      // transform: `translate(' + ${offset}+ 'px )`,
     });
   }
 

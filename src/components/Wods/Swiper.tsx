@@ -5,6 +5,7 @@ import { SwiperItem } from './SwiperItem.jsx';
 import { useUpdateSwiperStyle } from '../../hooks/useUpdateSwiperStyle.jsx';
 import { useOffset } from '../../hooks/useOffset.jsx';
 import type { WorkoutType } from './Wods.jsx';
+import { useEffect } from 'react';
 
 export type SlideWorkoutType =
   | WorkoutType<'women', "Rx'd">
@@ -17,47 +18,52 @@ export function Swiper({
   'main-thread:easing': MTEasing,
 }: {
   data: {
+    active: boolean;
     title: string;
-    workout: SlideWorkoutType[];
+    workout: (WorkoutType<'women', "Rx'd"> | WorkoutType<'men', "Rx'd">)[];
   }[];
   itemWidth?: number;
   duration?: number;
   'main-thread:easing'?: (t: number) => number;
 }) {
-  const [current, setCurrent] = useState(0);
+  const slides = data.map((item, index) => {
+    return {
+      active: item.active,
+      title: item.title,
+      workout: item.workout,
+      opacity: (10 - index) / 10,
+      zIndex: data.length - index,
+      transform:
+        'scale(' + (20 - index) / 20 + ') translateY(' + 10 * index + 'px)',
+    };
+  });
+  const [wods, setWods] = useState<
+    {
+      active: boolean;
+      title: string;
+      workout: SlideWorkoutType[];
+      opacity: number;
+      zIndex: number;
+      transform: string;
+    }[]
+  >(slides);
 
-  const { containerRef, updateSwiperStyle } = useUpdateSwiperStyle();
-  const { handleTouchStart, handleTouchMove, handleTouchEnd, updateIndex } =
-    useOffset({
-      itemWidth,
-      dataLength: data.length,
-      onIndexUpdate: setCurrent,
-      onOffsetUpdate: updateSwiperStyle,
-      duration,
-      MTEasing,
-    });
-
-  function handleItemClick(index: number) {
-    setCurrent(index);
-    updateIndex(index);
-  }
   return (
     <view class="swiper-wrapper">
-      <view
-        class="swiper-container"
-        main-thread:ref={containerRef}
-        main-thread:bindtouchstart={handleTouchStart}
-        main-thread:bindtouchmove={handleTouchMove}
-        main-thread:bindtouchend={handleTouchEnd}
-      >
-        {data.map(
-          (item) =>
+      <view class="swiper-container">
+        {wods.map(
+          (item, index) =>
             item.workout && (
               <SwiperItem
+                index={index}
+                length={data.length}
                 title={item.title}
                 pic={item.title}
                 itemWidth={itemWidth}
                 workout={item.workout}
+                opacity={item.opacity}
+                zIndex={data.length - index}
+                transform={item.transform}
               />
             ),
         )}

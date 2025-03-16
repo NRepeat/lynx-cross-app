@@ -7,7 +7,7 @@ type AnimationOptions = {
   delay?: number;
   easing?: (t: number) => number;
   onUpdate?: (value: number) => void;
-  onComplete?: () => void;
+  onComplete?: (value: number) => void;
 };
 
 // Common easing functions
@@ -68,7 +68,13 @@ function animateInner(options: AnimationOptions) {
       tick(ts);
       updateRafId(requestAnimationFrame(step));
     } else {
-      onComplete?.();
+      const progress =
+        Math.max(Math.min(((ts - startTs - delay) * 100) / duration, 100), 0) /
+        100;
+
+      const easedProgress = easing(progress);
+      const currentValue = from + (to - from) * easedProgress;
+      onComplete?.(currentValue);
     }
   }
 

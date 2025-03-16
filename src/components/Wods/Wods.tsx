@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { act, useEffect } from 'react';
 import './style.css';
 import { Swiper } from './Swiper.jsx';
 import { useQuery } from '@tanstack/react-query';
@@ -87,19 +87,19 @@ const Wods = () => {
       },
     },
   ];
-  console.log('🚀 ~ Wods ~ menRxWorkout:', menRxWorkout);
   const wods = [...womenRxWorkout, ...menRxWorkout];
   const slides = [
     { title: 'WOD 1', subTitle: 'CrossFit Open' },
     { title: 'WOD 2', subTitle: 'CrossFit Open' },
+    { title: 'WOD 2', subTitle: 'CrossFit Open' },
   ];
   const swiperData = slides.map((slide) => {
     return {
+      active: true,
       title: slide.title,
       workout: wods.filter((wod) => wod.title === slide.title),
     };
   });
-  console.log('🚀 ~ swiperData ~ swiperData :', swiperData);
   const easing = (x: number) => {
     'main thread';
     return x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2;
