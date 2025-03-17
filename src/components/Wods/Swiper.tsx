@@ -47,26 +47,32 @@ export function Swiper({
       transform: string;
     }[]
   >(slides);
-
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
   return (
     <view class="swiper-wrapper">
       <view class="swiper-container">
-        {wods.map(
-          (item, index) =>
+        {wods.map((item, index) => {
+          const isActive = index === currentIndex;
+          return (
             item.workout && (
               <SwiperItem
+                isInitialLoad={isInitialLoad}
+                isActive={isActive}
                 index={index}
                 length={data.length}
                 title={item.title}
                 pic={item.title}
                 itemWidth={itemWidth}
+                setCurrentIndex={setCurrentIndex}
                 workout={item.workout}
                 opacity={item.opacity}
                 zIndex={data.length - index}
                 transform={item.transform}
               />
-            ),
-        )}
+            )
+          );
+        })}
       </view>
     </view>
   );

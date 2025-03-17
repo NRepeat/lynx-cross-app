@@ -18,6 +18,7 @@
     justify-content: center;
     align-items: flex-end;
     z-index: 1;
+    position: relative;
     min-height: calc(var(--header-height) + var(--header-height));
     /* display: linear;
     linear-orientation: horizontal;
@@ -26,13 +27,14 @@
   .test{
     background-color: aquamarine;
   }
-  .swiper-item {
+  /* .swiper-item {
     display: flex;
     position: absolute;
     align-items: flex-start;
+    top: 0;
     flex-direction: column;
     gap: 1.5rem;
-    min-height: calc(var(--header-height) + var(--header-height));
+    min-height: calc(50vh - 2rem);
     justify-content: center;
     padding: calc(var(--header-height) - 1rem)  2rem 1.5rem 2rem ;
     background-color: var(--color-primary);
@@ -45,7 +47,7 @@
     font-size: 1.5rem;
     font-weight: 600;
     text-align: left;
-  }
+  } */
   .workout-component{
     display: flex;
     flex-direction: column;

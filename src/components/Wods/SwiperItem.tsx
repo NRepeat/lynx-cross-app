@@ -25,6 +25,9 @@ function SwiperItem({
   zIndex,
   transform,
   length,
+  isActive,
+  isInitialLoad,
+  setCurrentIndex,
 }: {
   index: number;
   pic: string;
@@ -33,10 +36,15 @@ function SwiperItem({
   transform: string;
   title: string;
   length: number;
+  isInitialLoad: boolean;
+  isActive: boolean;
   opacity: number;
+  setCurrentIndex: Dispatch<SetStateAction<number>>;
   workout: (WorkoutType<'women', "Rx'd"> | WorkoutType<'men', "Rx'd">)[];
 }) {
   const [current, setCurrent] = useState(0);
+  const [dragOffset, setDragOffset] = useState(0);
+  console.log('🚀 ~ dragOffset:', dragOffset);
   const { containerRef, updateSwiperStyle } = useUpdateSwiperStyle();
   const easing = (x: number) => {
     'main thread';
@@ -51,6 +59,14 @@ function SwiperItem({
       duration: 300,
       currentItemIndex: index,
       MTEasing: easing,
+      setCurrentIndex: (deltaX) => {
+        setCurrentIndex(
+          (prevIndex) =>
+            deltaX < 0
+              ? (prevIndex + 1) % length // Swipe left to move to next card
+              : (prevIndex - 1 + length) % length, // Swipe right to move to previous card
+        );
+      },
     });
 
   const location = useLocation();
@@ -63,18 +79,22 @@ function SwiperItem({
   };
   return (
     <view
-      id={`${index}`}
+      key={index}
       main-thread:ref={containerRef}
       main-thread:bindtouchstart={handleTouchStart}
       main-thread:bindtouchmove={handleTouchMove}
       main-thread:bindtouchend={handleTouchEnd}
+      // bindtouchend={handleTouchEnd}
       style={{
+        animation:
+          isActive && !isInitialLoad ? 'slideIn 0.6s forwards' : 'none',
         width: `${itemWidth}px`,
-        zIndex: zIndex,
-        transform: transform,
-        opacity: `${opacity}`,
+        transform: `translateX(${dragOffset}px)`,
+        // zIndex: `${zIndex}`,
+        // transform: transform,
+        // opacity: `${opacity}`,
       }}
-      className="swiper-item"
+      className={`swiper-item ${isActive ? 'active' : ''} ${isInitialLoad ? 'initial' : ''}`}
     >
       {/* <image
         mode="aspectFill"
