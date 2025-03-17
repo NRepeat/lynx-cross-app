@@ -12,7 +12,6 @@
   
   .swiper-container {
     flex-grow: 1;
-    padding-top: 40px;
     text-align: center;
     display: flex;
     justify-content: center;
@@ -31,7 +30,7 @@
     display: flex;
     position: absolute;
     align-items: flex-start;
-    top: 0;
+    top: -40px;
     flex-direction: column;
     gap: 1.5rem;
     min-height: calc(50vh - 2rem);

@@ -72,13 +72,9 @@ function SwiperItem({
       currentItemIndex: index,
       MTEasing: easing,
       currentIndex: index,
-      setCurrentIndex: (deltaX) => {
-        // setCurrentIndex(
-        //   (prevIndex) =>
-        //     deltaX < 0
-        //       ? (prevIndex + 1) % length // Swipe left to move to next card
-        //       : (prevIndex - 1 + length) % length, // Swipe right to move to previous card
-        // );
+      isActive,
+      setCurrentIndex: (index) => {
+        setCurrentIndex(index);
       },
     });
 
@@ -90,8 +86,11 @@ function SwiperItem({
   const handleHome = () => {
     nav('/');
   };
+  console.log('🚀 ~ isActive:', isActive);
+
   return (
     <view
+      id={`${index}`}
       key={index}
       main-thread:ref={containerRef}
       main-thread:bindtouchstart={handleTouchStart}
@@ -100,7 +99,7 @@ function SwiperItem({
       style={{
         animation: 'none',
         width: `${itemWidth}px`,
-        maxWidth: `${itemWidth - 40}px`,
+        maxWidth: `${itemWidth}px`,
         transform: transform,
         zIndex: `${zIndex}`,
         opacity: `${opacity}`,

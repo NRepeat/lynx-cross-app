@@ -118,6 +118,11 @@ const Wods = () => {
     { title: 'WOD 1', subTitle: 'CrossFit Open' },
     { title: 'WOD 2', subTitle: 'CrossFit Open' },
     { title: 'WOD 3', subTitle: 'CrossFit Open' },
+    { title: 'WOD 3', subTitle: 'CrossFit Open' },
+    { title: 'WOD 3', subTitle: 'CrossFit Open' },
+    { title: 'WOD 3', subTitle: 'CrossFit Open' },
+    { title: 'WOD 3', subTitle: 'CrossFit Open' },
+    { title: 'WOD 3', subTitle: 'CrossFit Open' },
   ];
   const swiperData = slides.map((slide) => {
     return {
