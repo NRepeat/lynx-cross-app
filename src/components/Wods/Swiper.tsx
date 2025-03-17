@@ -27,6 +27,7 @@ export function Swiper({
   'main-thread:easing'?: (t: number) => number;
 }) {
   const slides = data.map((item, index) => {
+    console.log('🚀 ~ item:', (20 - index) / 20);
     return {
       active: item.active,
       title: item.title,
@@ -34,7 +35,7 @@ export function Swiper({
       opacity: (10 - index) / 10,
       zIndex: data.length - index,
       transform:
-        'scale(' + (20 - index) / 20 + ') translateY(' + 10 * index + 'px)',
+        'scale(' + (20 - index) / 20 + ') translateY(' + 20 * index + 'px)',
     };
   });
   const [wods, setWods] = useState<
@@ -49,6 +50,7 @@ export function Swiper({
   >(slides);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
+  console.log('🚀 ~ wods:', wods);
   return (
     <view class="swiper-wrapper">
       <view class="swiper-container">
@@ -57,6 +59,7 @@ export function Swiper({
           return (
             item.workout && (
               <SwiperItem
+                updateData={setWods}
                 isInitialLoad={isInitialLoad}
                 isActive={isActive}
                 index={index}

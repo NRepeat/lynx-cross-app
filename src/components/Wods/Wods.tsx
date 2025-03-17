@@ -57,6 +57,19 @@ const Wods = () => {
         women: { "Rx'd": { thrusters: '95', doubleUnders: '100' } },
       },
     },
+    {
+      title: 'WOD 3',
+      subTitle: 'CrossFit Open',
+      details: {
+        gender: 'women',
+        difficulty: "Rx'd",
+      },
+      wodType: 'AMRAP',
+      workoutTemplate: '{thrusters} Thrusters, {doubleUnders} Double-unders',
+      variables: {
+        women: { "Rx'd": { thrusters: '95', doubleUnders: '100' } },
+      },
+    },
   ];
 
   const menRxWorkout: WorkoutType<'men', "Rx'd">[] = [
@@ -86,12 +99,25 @@ const Wods = () => {
         men: { "Rx'd": { thrusters: '195', doubleUnders: '1100' } },
       },
     },
+    {
+      title: 'WOD 3',
+      subTitle: 'CrossFit Open',
+      details: {
+        gender: 'men',
+        difficulty: "Rx'd",
+      },
+      wodType: 'AMRAP',
+      workoutTemplate: '{thrusters} Thrusters, {doubleUnders} Double-unders',
+      variables: {
+        men: { "Rx'd": { thrusters: '195', doubleUnders: '1100' } },
+      },
+    },
   ];
   const wods = [...womenRxWorkout, ...menRxWorkout];
   const slides = [
     { title: 'WOD 1', subTitle: 'CrossFit Open' },
     { title: 'WOD 2', subTitle: 'CrossFit Open' },
-    { title: 'WOD 2', subTitle: 'CrossFit Open' },
+    { title: 'WOD 3', subTitle: 'CrossFit Open' },
   ];
   const swiperData = slides.map((slide) => {
     return {

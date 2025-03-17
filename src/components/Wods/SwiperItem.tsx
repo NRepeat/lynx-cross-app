@@ -28,6 +28,7 @@ function SwiperItem({
   isActive,
   isInitialLoad,
   setCurrentIndex,
+  updateData,
 }: {
   index: number;
   pic: string;
@@ -39,12 +40,23 @@ function SwiperItem({
   isInitialLoad: boolean;
   isActive: boolean;
   opacity: number;
+  updateData: Dispatch<
+    SetStateAction<
+      {
+        active: boolean;
+        title: string;
+        workout: SlideWorkoutType[];
+        opacity: number;
+        zIndex: number;
+        transform: string;
+      }[]
+    >
+  >;
   setCurrentIndex: Dispatch<SetStateAction<number>>;
   workout: (WorkoutType<'women', "Rx'd"> | WorkoutType<'men', "Rx'd">)[];
 }) {
   const [current, setCurrent] = useState(0);
-  const [dragOffset, setDragOffset] = useState(0);
-  console.log('🚀 ~ dragOffset:', dragOffset);
+  const [dragOffset, setDragOffset] = useState();
   const { containerRef, updateSwiperStyle } = useUpdateSwiperStyle();
   const easing = (x: number) => {
     'main thread';
@@ -59,13 +71,14 @@ function SwiperItem({
       duration: 300,
       currentItemIndex: index,
       MTEasing: easing,
+      currentIndex: index,
       setCurrentIndex: (deltaX) => {
-        setCurrentIndex(
-          (prevIndex) =>
-            deltaX < 0
-              ? (prevIndex + 1) % length // Swipe left to move to next card
-              : (prevIndex - 1 + length) % length, // Swipe right to move to previous card
-        );
+        // setCurrentIndex(
+        //   (prevIndex) =>
+        //     deltaX < 0
+        //       ? (prevIndex + 1) % length // Swipe left to move to next card
+        //       : (prevIndex - 1 + length) % length, // Swipe right to move to previous card
+        // );
       },
     });
 
@@ -84,38 +97,16 @@ function SwiperItem({
       main-thread:bindtouchstart={handleTouchStart}
       main-thread:bindtouchmove={handleTouchMove}
       main-thread:bindtouchend={handleTouchEnd}
-      // bindtouchend={handleTouchEnd}
       style={{
-        animation:
-          isActive && !isInitialLoad ? 'slideIn 0.6s forwards' : 'none',
+        animation: 'none',
         width: `${itemWidth}px`,
-        transform: `translateX(${dragOffset}px)`,
-        // zIndex: `${zIndex}`,
-        // transform: transform,
-        // opacity: `${opacity}`,
+        maxWidth: `${itemWidth - 40}px`,
+        transform: transform,
+        zIndex: `${zIndex}`,
+        opacity: `${opacity}`,
       }}
-      className={`swiper-item ${isActive ? 'active' : ''} ${isInitialLoad ? 'initial' : ''}`}
+      className={`swiper-item`}
     >
-      {/* <image
-        mode="aspectFill"
-        src={pic}
-        style={{ width: '100%', minHeight: `200px` }}
-      ></image> */}
-      {/* <view className="header">
-        {title !== 'Home' ? (
-          <Icon
-            className="header-back"
-            bindtap={handleBack}
-            src={chevronLeft}
-          />
-        ) : (
-          <view style={{ width: '24px' }} />
-        )}
-        <text bindtap={handleHome} className="header__title">
-          {title}
-        </text>
-        <Icon className="header-user" src={user} />
-      </view> */}
       <text class="title">{title}</text>
 
       <WorkoutComponent workout={workout[0]} />

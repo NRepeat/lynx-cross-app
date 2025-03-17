@@ -16,6 +16,7 @@ export function useOffset({
   dataLength,
   duration,
   MTEasing,
+  currentIndex,
   currentItemIndex,
   setCurrentIndex,
 }: {
@@ -26,6 +27,7 @@ export function useOffset({
   duration?: number;
   MTEasing?: (t: number) => number;
   currentItemIndex: number;
+  currentIndex: number;
   setCurrentIndex: (deltaX: number) => void;
 }) {
   const touchStartXRef = useMainThreadRef<number>(0);
@@ -122,7 +124,6 @@ export function useOffset({
   //               '🚀 ~ onComplete ~ calcNearestPage(currentOffsetRef.current):',
   //               calcNearestPage(currentOffsetRef.current) * inverseProgress,
   //             );
-  //             // Опускаем текущий элемент в самый низ
   //             const currentTranslateYValue = 10 * (length - 1) * progress;
   //             nextItem.setStyleProperties({
   //               opacity: `${opacityNext}`,
@@ -178,7 +179,7 @@ export function useOffset({
     touchStartCurrentOffsetRef.current = 0;
     touchEndX.current = e.changedTouches[0].clientX;
     const deltaX = calcNearestPage(currentOffsetRef.current);
-
+    const allItems = lynx.querySelectorAll('.swiper-item');
     animate({
       from: currentOffsetRef.current,
       to: calcNearestPage(currentOffsetRef.current),
@@ -186,14 +187,114 @@ export function useOffset({
         updateOffset(offset);
       },
       onComplete(offset: number) {
-        if (deltaX !== -0) {
-          runOnBackground(setCurrentIndex)(deltaX);
-          e.currentTarget.setStyleProperties({
-            transform: `translateX(0px)`,
-          });
+        if (deltaX !== 0) {
           touchStartXRef.current = 0;
           touchStartCurrentOffsetRef.current = 0;
           currentOffsetRef.current = 0;
+
+          // Проверяем, завершился ли полный круг пролистывания
+          const isFullCircleComplete = currentIndex >= allItems.length - 1;
+
+          animate({
+            from: 0,
+            to: 1,
+            onUpdate: (progress: number) => {
+              const inverseProgress = 1 - progress;
+
+              // Обработка текущего элемента
+              const translateXValue = -379 * inverseProgress;
+              const translateYValue = 10 * dataLength * progress;
+              const opacityCurrent = 1;
+              const opacityEnd = Math.max(0.1, (10 - (dataLength - 1)) / 10);
+              const currentOpacity =
+                opacityCurrent + (opacityEnd - opacityCurrent) * progress;
+              const currentBaseScale = Math.max(
+                0.1,
+                (20 - (dataLength - 1)) / 20,
+              );
+              const currentScaleValue = Math.max(
+                0.1,
+                currentBaseScale * progress,
+              );
+
+              e.currentTarget.setStyleProperties({
+                transform: `translateX(${translateXValue}px) translateY(${translateYValue}px) scale(${currentScaleValue})`,
+                'z-index': `${-dataLength}`,
+                opacity: `${currentOpacity}`,
+              });
+
+              // Обработка остальных элементов
+              for (let i = 0; i < allItems.length; i++) {
+                // Пропускаем текущий элемент, так как он обрабатывается отдельно
+                if (i === currentIndex) continue;
+
+                // Вычисляем относительную позицию
+                let relativePosition = i - currentIndex;
+                if (relativePosition < 0) {
+                  relativePosition = allItems.length + relativePosition;
+                }
+
+                // Используем relativePosition для всех вычислений вместо i
+                // Это обеспечит последовательность в расчетах
+
+                // Интерполяция для положения по Y
+                const currentTranslateYValueStart = 20 * relativePosition;
+                const currentTranslateYValueEnd = 20 * (relativePosition - 1);
+                const currentTranslateYValue =
+                  currentTranslateYValueStart +
+                  (currentTranslateYValueEnd - currentTranslateYValueStart) *
+                    progress;
+
+                // Интерполяция для прозрачности
+                const baseOpacity = Math.max(
+                  0.1,
+                  (10 - (relativePosition - 1)) / 10,
+                );
+                console.log('🚀 ~ onComplete ~ baseOpacity:', baseOpacity);
+                const currentOpacity =
+                  baseOpacity + (1 - baseOpacity) * inverseProgress;
+
+                // Интерполяция для масштаба
+                const currentBaseScale = Math.max(
+                  0.1,
+                  (20 - relativePosition) / 20,
+                );
+                const nextScale = Math.max(
+                  0.1,
+                  (20 - relativePosition + 1) / 20,
+                );
+
+                const scale =
+                  currentBaseScale + (nextScale - currentBaseScale) * progress;
+
+                console.log('🚀 ~ onComplete ~ currentScaleValue:', scale);
+
+                // z-index зависит от позиции
+                const zIndexValue = allItems.length - relativePosition;
+
+                // Применяем стили
+                allItems[i].setStyleProperties({
+                  'z-index': `${zIndexValue}`,
+                  transform: `translateY(${currentTranslateYValue}px) scale(${scale})`,
+                  opacity: `${currentOpacity}`,
+                });
+              }
+            },
+            onComplete: () => {
+              // Если завершён полный круг, обновляем z-index для всех элементов
+              if (isFullCircleComplete) {
+                allItems.forEach((item, idx) => {
+                  // Устанавливаем правильный z-index в зависимости от позиции
+                  const zIndex = allItems.length - idx;
+                  item.setStyleProperties({
+                    'z-index': `${zIndex}`,
+                  });
+                });
+              }
+            },
+            duration: 300,
+            easing: MTEasing,
+          });
         }
       },
       duration: 300,
