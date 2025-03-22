@@ -24,6 +24,7 @@ export function useOffset({
     offset: number,
     upperBound: number,
     lowerBound: number,
+    currentIndex: number,
   ) => void;
   onIndexUpdate: (index: number) => void;
   itemWidth: number;
@@ -38,6 +39,7 @@ export function useOffset({
   const currentOffsetRef = useMainThreadRef<number>(0);
   const currentElementRef = useMainThreadRef<MainThread.Element | null>(null);
   const currentIndexRef = useMainThreadRef<number>(0);
+  const onCompleteRef = useMainThreadRef<boolean | null>(null);
   const { animate, cancel: cancelAnimate } = useAnimate();
   function updateIndex(index: number) {
     const offset = index * itemWidth;
@@ -55,13 +57,11 @@ export function useOffset({
     const lowerBound = itemWidth;
     const upperBound = -lowerBound;
     const realOffset = Math.max(upperBound, Math.min(lowerBound, offset));
-    //lowerBound = 393, upperBound = -393, offset = 0, normalizedOffset = 0.5
     const normalizedOffset =
       (2 * (offset - upperBound)) / (lowerBound - upperBound) - 1;
-
     currentOffsetRef.current = realOffset;
-    onOffsetUpdate(realOffset, upperBound, lowerBound);
-    updateAllItems(currentIndex, Number(normalizedOffset.toFixed(2)));
+    onOffsetUpdate(realOffset, upperBound, lowerBound, currentIndex);
+    // updateAllItems(currentIndex, Number(normalizedOffset.toFixed(2)));
     const index = Math.round(-realOffset / itemWidth);
     if (currentIndex !== index) {
       currentIndexRef.current = index;
@@ -97,6 +97,8 @@ export function useOffset({
     'main thread';
     touchStartXRef.current = 0;
     touchStartCurrentOffsetRef.current = 0;
+    const lowerBound = itemWidth;
+    const upperBound = -lowerBound;
     animate({
       from: currentOffsetRef.current,
       to: calcNearestPage(currentOffsetRef.current),
@@ -112,7 +114,6 @@ export function useOffset({
           touchStartXRef.current = 0;
           touchStartCurrentOffsetRef.current = 0;
           currentOffsetRef.current = 0;
-          const deltaX = calcNearestPage(currentOffsetRef.current);
           const allItems = lynx.querySelectorAll('.swiper-item');
           if (allItems[currentIndex + 1]) {
             allItems[currentIndex + 1].setAttribute('name', 'next');
@@ -120,6 +121,12 @@ export function useOffset({
             allItems[0].setAttribute('name', 'next');
           }
           e.currentTarget.setAttribute('name', 'last');
+          onCompleteRef.current = true;
+          const lowerBound = itemWidth;
+          const upperBound = -lowerBound;
+          const normalizedOffset =
+            (2 * (offset - upperBound)) / (lowerBound - upperBound) - 1;
+          updateAllItems(currentIndex, Number(normalizedOffset.toFixed(2)));
         }
       },
       duration,

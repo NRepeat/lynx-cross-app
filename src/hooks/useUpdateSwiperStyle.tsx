@@ -9,12 +9,13 @@ export function useUpdateSwiperStyle() {
     offset: number,
     upperBound: number,
     lowerBound: number,
+    currentIndex: number,
   ) {
     'main thread';
 
     const allItems = lynx.querySelectorAll('.swiper-item');
     const dataLength = allItems.length;
-    if (offset === upperBound) {
+    if (offset === upperBound || offset === lowerBound) {
       animate({
         from: 0,
         to: 1,
@@ -32,6 +33,20 @@ export function useUpdateSwiperStyle() {
             'z-index': `${-dataLength}`,
             opacity: `${currentOpacity}`,
           });
+          const nextTranslateY = 20 * (1 - progress); // Начинает выше, плавно опускается
+          const nextOpacity = Math.min(1, 0.9 + 0.7 * progress); // Начинает с 0.3, плавно становится 1
+
+          // if (allItems[currentIndex + 1]) {
+          //   allItems[currentIndex + 1].setStyleProperties({
+          //     transform: `translateY(${nextTranslateY}px)`,
+          //     opacity: `${nextOpacity}`,
+          //   });
+          // } else {
+          //   allItems[0].setStyleProperties({
+          //     transform: `translateY(${nextTranslateY}px)`,
+          //     opacity: `${nextOpacity}`,
+          //   });
+          // }
         },
 
         duration: 200,

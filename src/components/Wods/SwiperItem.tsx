@@ -46,7 +46,7 @@ function SwiperItem({
       dataLength: length,
       onIndexUpdate: setCurrent,
       onOffsetUpdate: updateSwiperStyle,
-      duration: 500,
+      duration: 200,
       updateAllItems,
       MTEasing: easing,
       currentIndex: index,
