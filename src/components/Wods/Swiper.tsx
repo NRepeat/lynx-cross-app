@@ -45,6 +45,7 @@ export function Swiper({
     }[]
   >(slides);
   const [currentIndex, setCurrentIndex] = useState(0);
+  console.log('🚀 ~ currentIndex:', currentIndex);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   return (
@@ -55,6 +56,8 @@ export function Swiper({
           return (
             item.workout && (
               <SwiperItem
+                isActive={isActive}
+                setCurrentIndex={setCurrentIndex}
                 length={wods.length}
                 key={index}
                 isInitialLoad={isInitialLoad}

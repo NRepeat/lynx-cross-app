@@ -14,7 +14,7 @@ root.render(
     <QueryClientProvider client={queryClient}>
       <MainLayout>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Wods />} />
           <Route path="/wods" element={<Wods />} />
           <Route path="/homee" element={<App />} />
         </Routes>

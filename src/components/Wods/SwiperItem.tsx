@@ -5,6 +5,8 @@ import { type RefObject } from 'react';
 import { useState } from '@lynx-js/react/legacy-react-runtime';
 import { useUpdateSwiperStyle } from '../../hooks/useUpdateSwiperStyle.jsx';
 import { useOffset } from '../../hooks/useOffset.jsx';
+import { runOnBackground } from '@lynx-js/react';
+import { useAnimate } from '../../hooks/useAnimate.jsx';
 function SwiperItem({
   pic,
   workout,
@@ -15,6 +17,8 @@ function SwiperItem({
   zIndex,
   transform,
   length,
+  setCurrentIndex,
+  isActive,
 }: {
   index: number;
   pic: string;
@@ -22,6 +26,8 @@ function SwiperItem({
   zIndex: number;
   transform: string;
   title: string;
+  isActive: boolean;
+  setCurrentIndex: (index: number) => void;
   isInitialLoad: boolean;
   opacity: number;
   length: number;
@@ -34,14 +40,13 @@ function SwiperItem({
   const [current, setCurrent] = useState(0);
   const { containerRef, updateSwiperStyle, updateAllItems } =
     useUpdateSwiperStyle();
-
   const { handleTouchStart, handleTouchMove, handleTouchEnd, updateIndex } =
     useOffset({
       itemWidth,
       dataLength: length,
       onIndexUpdate: setCurrent,
       onOffsetUpdate: updateSwiperStyle,
-      duration: 300,
+      duration: 500,
       updateAllItems,
       MTEasing: easing,
       currentIndex: index,
@@ -54,6 +59,7 @@ function SwiperItem({
       main-thread:ref={containerRef}
       id={`${index}`}
       key={index}
+      name={`${index === 0 ? 'first' : ''}`}
       style={{
         width: `${itemWidth}px`,
         height: '100%',

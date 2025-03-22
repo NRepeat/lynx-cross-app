@@ -1,6 +1,5 @@
 import { useMainThreadRef } from '@lynx-js/react';
-
-type AnimationOptions = {
+export type AnimationOptions = {
   from: number;
   to: number;
   duration?: number;
@@ -97,12 +96,21 @@ export function useAnimate() {
     lastCancelRef.current?.();
   }
 
-  function animate(options: AnimationOptions) {
+  function animate(options: AnimationOptions): Promise<void> {
     'main thread';
     cancel();
 
-    const { cancel: innerCancel } = animateInner(options);
-    lastCancelRef.current = innerCancel;
+    return new Promise((resolve) => {
+      const { cancel: innerCancel } = animateInner({
+        ...options,
+        onComplete: (value) => {
+          options.onComplete?.(value);
+          resolve(); // Завершаем Promise после завершения анимации
+        },
+      });
+
+      lastCancelRef.current = innerCancel;
+    });
   }
 
   return {

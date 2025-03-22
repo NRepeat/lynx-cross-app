@@ -20,7 +20,11 @@ export function useOffset({
   updateAllItems,
   currentIndex,
 }: {
-  onOffsetUpdate: (offset: number) => void;
+  onOffsetUpdate: (
+    offset: number,
+    upperBound: number,
+    lowerBound: number,
+  ) => void;
   onIndexUpdate: (index: number) => void;
   itemWidth: number;
   dataLength: number;
@@ -56,7 +60,7 @@ export function useOffset({
       (2 * (offset - upperBound)) / (lowerBound - upperBound) - 1;
 
     currentOffsetRef.current = realOffset;
-    onOffsetUpdate(realOffset);
+    onOffsetUpdate(realOffset, upperBound, lowerBound);
     updateAllItems(currentIndex, Number(normalizedOffset.toFixed(2)));
     const index = Math.round(-realOffset / itemWidth);
     if (currentIndex !== index) {
@@ -76,10 +80,17 @@ export function useOffset({
 
   function handleTouchMove(e: MainThread.TouchEvent) {
     'main thread';
-    const touchMoveX = e.touches[0].clientX;
 
-    const deltaX = touchMoveX - touchStartXRef.current;
-    updateOffset(touchStartCurrentOffsetRef.current + deltaX);
+    const item = e.currentTarget;
+    if (item.getAttribute('name') === 'first') {
+      const touchMoveX = e.touches[0].clientX;
+      const deltaX = touchMoveX - touchStartXRef.current;
+      updateOffset(touchStartCurrentOffsetRef.current + deltaX);
+    } else if (item.getAttribute('name') === 'next') {
+      const touchMoveX = e.touches[0].clientX;
+      const deltaX = touchMoveX - touchStartXRef.current;
+      updateOffset(touchStartCurrentOffsetRef.current + deltaX);
+    }
   }
 
   function handleTouchEnd(e: MainThread.TouchEvent) {
@@ -97,34 +108,19 @@ export function useOffset({
       },
       onComplete: (offset) => {
         'main thread';
-        touchStartXRef.current = 0;
-        touchStartCurrentOffsetRef.current = 0;
-        currentOffsetRef.current = 0;
-        const deltaX = calcNearestPage(currentOffsetRef.current);
-        animate({
-          from: 0,
-          to: 1,
-          onUpdate: (progress: number) => {
-            if (offset !== 0) {
-              const inverseProgress = 1 - progress;
-              const translateXValue = deltaX * inverseProgress;
-              const translateYValue = 20 * dataLength * progress;
-              const opacityCurrent = 1;
-              const opacityEnd = Math.max(0.1, (10 - dataLength) / 10);
-              const currentOpacity =
-                opacityCurrent + (opacityEnd - opacityCurrent) * progress;
-
-              e.currentTarget.setStyleProperties({
-                transform: `translateX(${translateXValue}px) translateY(${translateYValue - 20}px) `,
-                'z-index': `${-dataLength}`,
-                opacity: `${currentOpacity}`,
-              });
-            }
-          },
-
-          duration: 100,
-          easing: MTEasing,
-        });
+        if (offset !== 0) {
+          touchStartXRef.current = 0;
+          touchStartCurrentOffsetRef.current = 0;
+          currentOffsetRef.current = 0;
+          const deltaX = calcNearestPage(currentOffsetRef.current);
+          const allItems = lynx.querySelectorAll('.swiper-item');
+          if (allItems[currentIndex + 1]) {
+            allItems[currentIndex + 1].setAttribute('name', 'next');
+          } else if (allItems.length - 1 === currentIndex) {
+            allItems[0].setAttribute('name', 'next');
+          }
+          e.currentTarget.setAttribute('name', 'last');
+        }
       },
       duration,
       easing: MTEasing,

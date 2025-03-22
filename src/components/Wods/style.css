@@ -43,6 +43,7 @@
     background-color: var(--color-primary);
     border-bottom-right-radius: calc(var(--radius-box) + 1rem);
     border-bottom-left-radius:  calc(var(--radius-box) + 1rem);
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.2);
     animation: all 0.5s ease-in-out;
   }
   .swiper-item > .title{
