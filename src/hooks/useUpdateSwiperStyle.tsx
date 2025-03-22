@@ -22,19 +22,20 @@ export function useUpdateSwiperStyle() {
         onUpdate: (progress: number) => {
           'main thread';
           const inverseProgress = 1 - progress;
-          const translateXValue = lowerBound * inverseProgress;
+          const translateXValue =
+            offset === upperBound
+              ? upperBound * inverseProgress
+              : lowerBound * inverseProgress;
           const translateYValue = 20 * dataLength * progress;
           const opacityCurrent = 1;
           const opacityEnd = Math.max(0.1, (10 - dataLength) / 10);
           const currentOpacity =
             opacityCurrent + (opacityEnd - opacityCurrent) * progress;
           containerRef.current?.setStyleProperties({
-            transform: `translateX(${0}px) translateY(${translateYValue - 20}px) `,
+            transform: `translateX(${translateXValue}px) translateY(${translateYValue - 20}px) `,
             'z-index': `${-dataLength}`,
             opacity: `${currentOpacity}`,
           });
-          const nextTranslateY = 20 * (1 - progress); // Начинает выше, плавно опускается
-          const nextOpacity = Math.min(1, 0.9 + 0.7 * progress); // Начинает с 0.3, плавно становится 1
 
           // if (allItems[currentIndex + 1]) {
           //   allItems[currentIndex + 1].setStyleProperties({

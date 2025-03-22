@@ -35,6 +35,7 @@ export function useOffset({
   MTEasing?: (t: number) => number;
 }) {
   const touchStartXRef = useMainThreadRef<number>(0);
+  const touchStartRef = useMainThreadRef<number>(0);
   const touchStartCurrentOffsetRef = useMainThreadRef<number>(0);
   const currentOffsetRef = useMainThreadRef<number>(0);
   const currentElementRef = useMainThreadRef<MainThread.Element | null>(null);
@@ -82,13 +83,13 @@ export function useOffset({
     'main thread';
 
     const item = e.currentTarget;
+    const touchMoveX = e.touches[0].clientX;
+    const touchMoveY = e.touches[0].clientY;
+
+    const deltaX = touchMoveX - touchStartXRef.current;
     if (item.getAttribute('name') === 'first') {
-      const touchMoveX = e.touches[0].clientX;
-      const deltaX = touchMoveX - touchStartXRef.current;
       updateOffset(touchStartCurrentOffsetRef.current + deltaX);
     } else if (item.getAttribute('name') === 'next') {
-      const touchMoveX = e.touches[0].clientX;
-      const deltaX = touchMoveX - touchStartXRef.current;
       updateOffset(touchStartCurrentOffsetRef.current + deltaX);
     }
   }

@@ -41,6 +41,8 @@
     justify-content: center;
     padding: calc(var(--header-height) - 1rem)  2rem 1.5rem 2rem ;
     background-color: var(--color-primary);
+    border-top-right-radius: calc(var(--radius-box) + 1rem);
+    border-top-right-radius: calc(var(--radius-box) + 1rem);
     border-bottom-right-radius: calc(var(--radius-box) + 1rem);
     border-bottom-left-radius:  calc(var(--radius-box) + 1rem);
     box-shadow: 0 0 1rem rgba(0, 0, 0, 0.2);
