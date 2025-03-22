@@ -101,11 +101,11 @@ export function useOffset({
       from: currentOffsetRef.current,
       to: calcNearestPage(currentOffsetRef.current),
       onUpdate: (offset: number) => {
-        // if (
-        //   calcNearestPage(currentOffsetRef.current) < currentOffsetRef.current
-        // ) {
-        //   canTouch.current = false;
-        // }
+        if (
+          calcNearestPage(currentOffsetRef.current) < currentOffsetRef.current
+        ) {
+          canTouch.current = false;
+        }
         updateOffset(offset);
       },
       onComplete(offset: number) {
@@ -205,7 +205,7 @@ export function useOffset({
                 runOnBackground(setCurrentIndex)(currentIndex + 1);
               }
             },
-            duration: 10,
+            duration: 100,
             easing: MTEasing,
           });
         } else if (offset > 0) {
@@ -301,12 +301,12 @@ export function useOffset({
               // Добавлен сброс флага после завершения анимации
               isAnimating.current = false;
             },
-            duration: 10,
+            duration: 100,
             easing: MTEasing,
           });
         }
       },
-      duration: 100,
+      duration: 200,
       easing: MTEasing,
     });
   }
