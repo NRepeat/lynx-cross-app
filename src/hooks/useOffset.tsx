@@ -26,7 +26,6 @@ export function useOffset({
   itemWidth: number;
   dataLength: number;
   duration?: number;
-
   isActive: boolean;
   MTEasing?: (t: number) => number;
   currentItemIndex: number;
@@ -38,6 +37,8 @@ export function useOffset({
   const currentOffsetRef = useMainThreadRef<number>(0);
   const currentIndexRef = useMainThreadRef<number>(0);
   const touchEndX = useMainThreadRef<number>(0);
+  const isAnimating = useMainThreadRef<boolean>(false);
+  const canTouch = useMainThreadRef<boolean>(true);
   const { animate, cancel: cancelAnimate } = useAnimate();
   function updateIndex(index: number) {
     const offset = index * itemWidth;
@@ -52,14 +53,16 @@ export function useOffset({
 
   function updateOffset(offset: number) {
     'main thread';
-    const lowerBound = itemWidth; // Позволяем небольшое движение вправо
+    const lowerBound = itemWidth;
     const upperBound = -(dataLength - 1) * itemWidth;
-
+    isAnimating.current = true;
     const realOffset = Math.max(upperBound, Math.min(lowerBound, offset));
+
+    console.log('🚀 ~ isAnimating:', isAnimating.current);
 
     currentOffsetRef.current = realOffset;
     onOffsetUpdate(realOffset);
-
+    // if()
     const index = Math.round(-realOffset / itemWidth);
     if (currentItemIndex !== index) {
       currentIndexRef.current = index;
@@ -69,16 +72,12 @@ export function useOffset({
 
   function handleTouchStart(e: MainThread.TouchEvent) {
     'main thread';
-    console.log('🚀 ~ handleTouchStart ~ isActive:', isActive);
 
     if (!isActive) return;
+    if (!canTouch.current) return;
     touchStartXRef.current = e.touches[0].clientX;
     touchStartCurrentOffsetRef.current = currentOffsetRef.current;
-    console.log(
-      '🚀 ~ handleTouchStart ~ touchStartCurrentOffsetRef.current :',
-      touchStartCurrentOffsetRef.current,
-    );
-    cancelAnimate();
+    // cancelAnimate();
   }
 
   function handleTouchMove(e: MainThread.TouchEvent) {
@@ -97,16 +96,20 @@ export function useOffset({
     touchStartCurrentOffsetRef.current = 0;
     touchEndX.current = e.changedTouches[0].clientX;
     const deltaX = calcNearestPage(currentOffsetRef.current);
-    console.log('🚀 ~ handleTouchEnd ~ deltaX:', deltaX);
     const allItems = lynx.querySelectorAll('.swiper-item');
     animate({
       from: currentOffsetRef.current,
       to: calcNearestPage(currentOffsetRef.current),
       onUpdate: (offset: number) => {
+        // if (
+        //   calcNearestPage(currentOffsetRef.current) < currentOffsetRef.current
+        // ) {
+        //   canTouch.current = false;
+        // }
         updateOffset(offset);
       },
       onComplete(offset: number) {
-        if (deltaX < 0) {
+        if (offset < 0) {
           touchStartXRef.current = 0;
           touchStartCurrentOffsetRef.current = 0;
           currentOffsetRef.current = 0;
@@ -202,10 +205,10 @@ export function useOffset({
                 runOnBackground(setCurrentIndex)(currentIndex + 1);
               }
             },
-            duration: 100,
+            duration: 10,
             easing: MTEasing,
           });
-        } else {
+        } else if (offset > 0) {
           touchStartXRef.current = 0;
           touchStartCurrentOffsetRef.current = 0;
           currentOffsetRef.current = 0;
@@ -238,60 +241,7 @@ export function useOffset({
 
               for (let i = 0; i < allItems.length; i++) {
                 if (i === currentIndex) continue;
-                const last = allItems[i].getAttribute('data-last');
-                console.log('🚀 ~ onComplete ~ last :', last);
-                if (last === 'true') {
-                  let relativePosition = i - currentIndex;
-                  if (relativePosition < 0) {
-                    relativePosition = allItems.length + relativePosition;
-                  }
 
-                  const currentTranslateYValueStart = 20 * relativePosition;
-                  const currentTranslateYValueEnd = 0;
-                  const currentTranslateYValue =
-                    currentTranslateYValueStart +
-                    (currentTranslateYValueEnd - currentTranslateYValueStart) *
-                      progress;
-                  console.log(
-                    '🚀 ~ onComplete ~ currentTranslateYValue :',
-                    currentTranslateYValue,
-                  );
-                  // Интерполяция для прозрачности
-                  const baseOpacity = Math.max(
-                    0.1,
-                    (10 - (relativePosition - 1)) / 10,
-                  );
-                  const opacityCurrent = Math.max(
-                    0.1,
-                    (10 - (dataLength - 1)) / 10,
-                  );
-                  const opacityEnd = 1;
-                  const currentOpacity =
-                    opacityCurrent + (opacityEnd - opacityCurrent) * progress;
-                  const currentBaseScale = Math.max(
-                    0.1,
-                    (20 - relativePosition) / 20,
-                  );
-                  const nextScale = 1;
-
-                  const scale =
-                    currentBaseScale +
-                    (nextScale - currentBaseScale) * progress;
-
-                  // Применяем стили
-                  allItems[i].setStyleProperties({
-                    'z-index': `${dataLength}`,
-                    transform: `translateY(${currentTranslateYValue}px) scale(${scale})`,
-                    opacity: `${currentOpacity}`,
-                  });
-
-                  const id = allItems[i].getAttribute('idSelector');
-                  console.log('🚀 ~ onComplete ~ id:', id);
-                  if (id && Number(id) !== currentIndex) {
-                    runOnBackground(setCurrentIndex)(Number(id));
-                  }
-                  return;
-                }
                 let relativePosition = i - currentIndex;
                 if (relativePosition < 0) {
                   relativePosition = allItems.length + relativePosition;
@@ -304,7 +254,6 @@ export function useOffset({
                   (currentTranslateYValueEnd - currentTranslateYValueStart) *
                     progress;
 
-                // Интерполяция для прозрачности
                 const baseOpacity = Math.max(
                   0.1,
                   (10 - (relativePosition - 1)) / 10,
@@ -312,7 +261,6 @@ export function useOffset({
                 const currentOpacity =
                   baseOpacity + (1 - baseOpacity) * inverseProgress;
 
-                // Интерполяция для масштаба
                 const currentBaseScale = Math.max(
                   0.1,
                   (20 - relativePosition) / 20,
@@ -327,7 +275,6 @@ export function useOffset({
 
                 const zIndexValue = allItems.length - relativePosition;
 
-                // Применяем стили
                 allItems[i].setStyleProperties({
                   'z-index': `${zIndexValue}`,
                   transform: `translateY(${currentTranslateYValue}px) scale(${scale})`,
@@ -344,13 +291,17 @@ export function useOffset({
                   });
                 });
               }
-              // if (currentIndex === allItems.length - 1) {
-              //   runOnBackground(setCurrentIndex)(0);
-              // } else {
-              //   runOnBackground(setCurrentIndex)(currentIndex + 1);
-              // }
+              e.currentTarget.setAttribute('data-last', 'true');
+
+              if (currentIndex === allItems.length - 1) {
+                runOnBackground(setCurrentIndex)(0);
+              } else {
+                runOnBackground(setCurrentIndex)(currentIndex + 1);
+              }
+              // Добавлен сброс флага после завершения анимации
+              isAnimating.current = false;
             },
-            duration: 100,
+            duration: 10,
             easing: MTEasing,
           });
         }

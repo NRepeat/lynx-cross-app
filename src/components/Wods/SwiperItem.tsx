@@ -56,7 +56,6 @@ function SwiperItem({
   workout: (WorkoutType<'women', "Rx'd"> | WorkoutType<'men', "Rx'd">)[];
 }) {
   const [current, setCurrent] = useState(0);
-  const [dragOffset, setDragOffset] = useState();
   const { containerRef, updateSwiperStyle } = useUpdateSwiperStyle();
   const easing = (x: number) => {
     'main thread';
@@ -86,7 +85,6 @@ function SwiperItem({
   const handleHome = () => {
     nav('/');
   };
-  console.log('🚀 ~ isActive:', isActive);
 
   return (
     <view
