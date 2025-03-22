@@ -19,17 +19,21 @@
     z-index: 1;
     position: relative;
     min-height: calc(var(--header-height) + var(--header-height));
-    /* display: linear;
+    height: 100%;
+    display: linear;
     linear-orientation: horizontal;
-    height: 100%; */
+
+    height: 100%;
   }
   .test{
     background-color: aquamarine;
   }
   .swiper-item {
-    display: flex;
+    /* display: flex; */
     position: absolute;
-    align-items: flex-start;
+    /* grid-row: 1; */
+    display: flex;
+    /* align-items: flex-end; */
     top: -40px;
     flex-direction: column;
     gap: 1.5rem;
