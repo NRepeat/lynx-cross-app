@@ -114,16 +114,27 @@ const Wods = () => {
     },
   ];
   const wods = [...womenRxWorkout, ...menRxWorkout];
-  const slides = [
+  const firstSlides = [
     { title: 'WOD 1', subTitle: 'CrossFit Open' },
     { title: 'WOD 2', subTitle: 'CrossFit Open' },
     { title: 'WOD 3', subTitle: 'CrossFit Open' },
-    // { title: 'WOD 3', subTitle: 'CrossFit Open' },
-    // { title: 'WOD 3', subTitle: 'CrossFit Open' },
-    // { title: 'WOD 3', subTitle: 'CrossFit Open' },
-    // { title: 'WOD 3', subTitle: 'CrossFit Open' },
-    // { title: 'WOD 3', subTitle: 'CrossFit Open' },
+    { title: 'WOD 3', subTitle: 'CrossFit Open' },
+    { title: 'WOD 3', subTitle: 'CrossFit Open' },
+    { title: 'WOD 3', subTitle: 'CrossFit Open' },
+    { title: 'WOD 3', subTitle: 'CrossFit Open' },
+    { title: 'WOD 3', subTitle: 'CrossFit Open' },
   ];
+  const nextSlides = [
+    { title: 'WOD 1', subTitle: 'CrossFit Open' },
+    { title: 'WOD 2', subTitle: 'CrossFit Open' },
+    { title: 'WOD 3', subTitle: 'CrossFit Open' },
+    { title: 'WOD 3', subTitle: 'CrossFit Open' },
+    { title: 'WOD 3', subTitle: 'CrossFit Open' },
+    { title: 'WOD 3', subTitle: 'CrossFit Open' },
+    { title: 'WOD 3', subTitle: 'CrossFit Open' },
+    { title: 'WOD 3', subTitle: 'CrossFit Open' },
+  ];
+  const [slides, setSlides] = React.useState(firstSlides);
   const swiperData = slides.map((slide) => {
     return {
       active: true,

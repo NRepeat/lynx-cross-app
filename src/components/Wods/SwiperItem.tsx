@@ -13,6 +13,7 @@ import { useOffset } from '../../hooks/useOffset.jsx';
 import { runOnBackground } from '@lynx-js/react';
 import { useAnimate } from '../../hooks/useAnimate.jsx';
 import { useNavigate } from 'react-router';
+import data from '../../assets/home-data.js';
 function SwiperItem({
   pic,
   workout,
@@ -111,7 +112,7 @@ function SwiperItem({
       main-thread:ref={containerRef}
       id={`${index}`}
       key={index}
-      name={`${index === 0 ? 'first' : ''}`}
+      name={`${index === 0 ? 'first' : index === length - 1 ? 'last' : ''}`}
       style={{
         width: `${itemWidth}px`,
         height: `${'65vh'}`,

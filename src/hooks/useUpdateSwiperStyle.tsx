@@ -31,28 +31,13 @@ export function useUpdateSwiperStyle() {
           const opacityEnd = Math.max(0.1, (10 - dataLength) / 10);
           const currentOpacity =
             opacityCurrent + (opacityEnd - opacityCurrent) * progress;
-          const isOpen = containerRef.current?.getAttribute('open') === 'true';
           containerRef.current?.setStyleProperties({
             transform: `translateX(${translateXValue}px) translateY(${translateYValue - 10}px) `,
             'z-index': `${-dataLength}`,
             opacity: `${currentOpacity}`,
             height: `65vh`,
           });
-          containerRef.current?.setAttribute(
-            'open',
-            `${isOpen ? 'false' : 'true'}`,
-          );
-          // if (allItems[currentIndex + 1]) {
-          //   allItems[currentIndex + 1].setStyleProperties({
-          //     transform: `translateY(${nextTranslateY}px)`,
-          //     opacity: `${nextOpacity}`,
-          //   });
-          // } else {
-          //   allItems[0].setStyleProperties({
-          //     transform: `translateY(${nextTranslateY}px)`,
-          //     opacity: `${nextOpacity}`,
-          //   });
-          // }
+          containerRef.current?.setAttribute('open', `false`);
         },
 
         duration: 200,

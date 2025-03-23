@@ -45,7 +45,6 @@ export function Swiper({
     }[]
   >(slides);
   const [currentIndex, setCurrentIndex] = useState(0);
-  console.log('🚀 ~ currentIndex:', currentIndex);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   return (
