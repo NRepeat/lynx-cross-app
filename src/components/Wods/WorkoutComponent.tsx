@@ -1,9 +1,14 @@
 import type { SlideWorkoutType } from './Swiper.jsx';
+import type { WorkoutType } from './Wods.jsx';
 
 export const WorkoutComponent = ({
   workout,
 }: {
-  workout: SlideWorkoutType;
+  workout:
+    | WorkoutType<'women', "Rx'd">
+    | WorkoutType<'men', "Rx'd">
+    | WorkoutType<'men', 'Scaled'>
+    | WorkoutType<'women', 'Scaled'>;
 }) => {
   const { title, subTitle, wodType, workoutTemplate, details } = workout;
   const { gender, difficulty } = details;

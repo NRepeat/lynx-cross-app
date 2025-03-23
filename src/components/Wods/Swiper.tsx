@@ -14,22 +14,14 @@ export function Swiper({
   itemWidth?: number;
   duration?: number;
 }) {
-  const slidess = useSlideStore((state) => state.slides);
-  const swiperData = slidess.map((slide) => {
+  const slides = useSlideStore((state) => state.slides);
+  const swiperData = slides.map((slide, index) => {
     return {
-      active: true,
       title: slide.title,
-      workout: slide.subTitle,
-    };
-  });
-  const slides = swiperData.map((item, index) => {
-    return {
-      active: item.active,
-      title: item.title,
-      workout: item.title,
+      workout: slide.workout,
       display: index > 3 ? 'none' : 'block',
       opacity: (10 - index) / 10,
-      zIndex: swiperData.length - index,
+      zIndex: slides.length - index,
       transform: ` translateY(${10 * index}px)`,
     };
   });
@@ -40,7 +32,7 @@ export function Swiper({
   return (
     <view class="swiper-wrapper">
       <view class="swiper-container">
-        {slides.map((item, index) => {
+        {swiperData.map((item, index) => {
           const isActive = index === currentIndex;
           return (
             item.workout && (

@@ -134,7 +134,7 @@ export function useOffset({
             (2 * (offset - upperBound)) / (lowerBound - upperBound) - 1;
           updateAllItems(currentIndex, Number(normalizedOffset.toFixed(2)));
           if (currentIndex === dataLength - 1) {
-            runOnBackground(state.setSlides)(state.nextSlides);
+            // runOnBackground(state.setSlides)(state.nextSlides);
           }
         }
       },
