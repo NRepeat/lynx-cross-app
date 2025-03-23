@@ -31,7 +31,7 @@ export function Swiper({
       workout: item.workout,
       opacity: (10 - index) / 10,
       zIndex: data.length - index,
-      transform: ` translateY(${20 * index}px)`,
+      transform: ` translateY(${10 * index}px)`,
     };
   });
   const [wods, setWods] = useState<

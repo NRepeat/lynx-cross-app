@@ -26,17 +26,22 @@ export function useUpdateSwiperStyle() {
             offset === upperBound
               ? upperBound * inverseProgress
               : lowerBound * inverseProgress;
-          const translateYValue = 20 * dataLength * progress;
+          const translateYValue = 10 * dataLength * progress;
           const opacityCurrent = 1;
           const opacityEnd = Math.max(0.1, (10 - dataLength) / 10);
           const currentOpacity =
             opacityCurrent + (opacityEnd - opacityCurrent) * progress;
+          const isOpen = containerRef.current?.getAttribute('open') === 'true';
           containerRef.current?.setStyleProperties({
-            transform: `translateX(${translateXValue}px) translateY(${translateYValue - 20}px) `,
+            transform: `translateX(${translateXValue}px) translateY(${translateYValue - 10}px) `,
             'z-index': `${-dataLength}`,
             opacity: `${currentOpacity}`,
+            height: `65vh`,
           });
-
+          containerRef.current?.setAttribute(
+            'open',
+            `${isOpen ? 'false' : 'true'}`,
+          );
           // if (allItems[currentIndex + 1]) {
           //   allItems[currentIndex + 1].setStyleProperties({
           //     transform: `translateY(${nextTranslateY}px)`,
@@ -72,8 +77,8 @@ export function useUpdateSwiperStyle() {
         relativePosition = allItems.length + relativePosition;
       }
 
-      const currentTranslateYValueStart = 20 * relativePosition;
-      const currentTranslateYValueEnd = 20 * (relativePosition - 1);
+      const currentTranslateYValueStart = 10 * relativePosition;
+      const currentTranslateYValueEnd = 10 * (relativePosition - 1);
 
       let currentTranslateYValue =
         currentTranslateYValueStart +

@@ -1,12 +1,18 @@
 import { WorkoutComponent } from './WorkoutComponent.jsx';
 import type { WorkoutType } from './Wods.jsx';
-import type { BaseTouchEvent, MainThread, TouchEvent } from '@lynx-js/types';
+import type {
+  BaseTouchEvent,
+  MainThread,
+  Target,
+  TouchEvent,
+} from '@lynx-js/types';
 import { type RefObject } from 'react';
 import { useState } from '@lynx-js/react/legacy-react-runtime';
 import { useUpdateSwiperStyle } from '../../hooks/useUpdateSwiperStyle.jsx';
 import { useOffset } from '../../hooks/useOffset.jsx';
 import { runOnBackground } from '@lynx-js/react';
 import { useAnimate } from '../../hooks/useAnimate.jsx';
+import { useNavigate } from 'react-router';
 function SwiperItem({
   pic,
   workout,
@@ -40,6 +46,7 @@ function SwiperItem({
   const [current, setCurrent] = useState(0);
   const { containerRef, updateSwiperStyle, updateAllItems } =
     useUpdateSwiperStyle();
+  const { animate, cancel } = useAnimate();
   const { handleTouchStart, handleTouchMove, handleTouchEnd, updateIndex } =
     useOffset({
       itemWidth,
@@ -51,18 +58,63 @@ function SwiperItem({
       MTEasing: easing,
       currentIndex: index,
     });
+  const handleTap = async (e: BaseTouchEvent<MainThread.Element>) => {
+    'main thread';
+    const openCard = e.currentTarget.getAttribute('open') === 'true';
+    const target = e.currentTarget;
+    const active =
+      target.getAttribute('name') === 'first' ||
+      target.getAttribute('name') === 'next';
+    function open() {
+      if (active) {
+        cancel();
+        if (openCard) {
+          animate({
+            from: 1,
+            to: 0.65,
+            onUpdate: (value) => {
+              target.setStyleProperties({
+                height: `${value * 100}vh`,
+              });
+            },
+            onComplete: () => {
+              target.setAttribute('open', 'false');
+            },
+            duration: 200,
+          });
+        } else {
+          animate({
+            from: 0.65,
+            to: 1.1,
+            onUpdate: (value) => {
+              target.setStyleProperties({
+                height: `${value * 100}vh`,
+                opacity: '1',
+              });
+            },
+            onComplete: () => {
+              target.setAttribute('open', 'true');
+            },
+            duration: 200,
+          });
+        }
+      }
+    }
+    open();
+  };
   return (
     <view
       main-thread:bindtouchstart={handleTouchStart}
       main-thread:bindtouchmove={handleTouchMove}
       main-thread:bindtouchend={handleTouchEnd}
+      main-thread:bindtap={handleTap}
       main-thread:ref={containerRef}
       id={`${index}`}
       key={index}
       name={`${index === 0 ? 'first' : ''}`}
       style={{
         width: `${itemWidth}px`,
-        height: '100%',
+        height: `${'65vh'}`,
         transform,
         zIndex: `${zIndex}`,
         opacity: `${opacity}`,

@@ -17,6 +17,7 @@ root.render(
           <Route path="/" element={<Wods />} />
           <Route path="/wods" element={<Wods />} />
           <Route path="/homee" element={<App />} />
+          <Route path="/workout/:id" element={<Home />} />
         </Routes>
       </MainLayout>
     </QueryClientProvider>
