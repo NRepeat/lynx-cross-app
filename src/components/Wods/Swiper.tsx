@@ -1,63 +1,54 @@
 import './style.css';
-import { useRef, useState } from '@lynx-js/react';
+import { useState } from '@lynx-js/react';
 import { SwiperItem } from './SwiperItem.jsx';
-import { useUpdateSwiperStyle } from '../../hooks/useUpdateSwiperStyle.jsx';
-import { useOffset } from '../../hooks/useOffset.jsx';
 import type { WorkoutType } from './Wods.jsx';
+import { useSlideStore } from '../../store/workout.js';
 
 export type SlideWorkoutType =
   | WorkoutType<'women', "Rx'd">
   | WorkoutType<'men', "Rx'd">;
 
 export function Swiper({
-  data,
   itemWidth = SystemInfo.pixelWidth / SystemInfo.pixelRatio,
-  duration,
-  'main-thread:easing': MTEasing,
 }: {
-  data: {
-    active: boolean;
-    title: string;
-    workout: (WorkoutType<'women', "Rx'd"> | WorkoutType<'men', "Rx'd">)[];
-  }[];
   itemWidth?: number;
   duration?: number;
-  'main-thread:easing'?: (t: number) => number;
 }) {
-  const slides = data.map((item, index) => {
+  const slidess = useSlideStore((state) => state.slides);
+  const swiperData = slidess.map((slide) => {
+    return {
+      active: true,
+      title: slide.title,
+      workout: slide.subTitle,
+    };
+  });
+  const slides = swiperData.map((item, index) => {
     return {
       active: item.active,
       title: item.title,
-      workout: item.workout,
+      workout: item.title,
+      display: index > 3 ? 'none' : 'block',
       opacity: (10 - index) / 10,
-      zIndex: data.length - index,
+      zIndex: swiperData.length - index,
       transform: ` translateY(${10 * index}px)`,
     };
   });
-  const [wods, setWods] = useState<
-    {
-      active: boolean;
-      title: string;
-      workout: SlideWorkoutType[];
-      opacity: number;
-      zIndex: number;
-      transform: string;
-    }[]
-  >(slides);
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   return (
     <view class="swiper-wrapper">
       <view class="swiper-container">
-        {wods.map((item, index) => {
+        {slides.map((item, index) => {
           const isActive = index === currentIndex;
           return (
             item.workout && (
               <SwiperItem
                 isActive={isActive}
+                display={item.display as 'block' | 'none'}
                 setCurrentIndex={setCurrentIndex}
-                length={wods.length}
+                length={slides.length}
                 key={index}
                 isInitialLoad={isInitialLoad}
                 index={index}

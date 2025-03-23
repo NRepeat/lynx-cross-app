@@ -9,6 +9,7 @@ import {
 } from '@lynx-js/react';
 import type { BaseTouchEvent, MainThread, Target } from '@lynx-js/types';
 import { useAnimate } from './useAnimate.jsx';
+import { useSlideStore } from '../store/workout.js';
 
 export function useOffset({
   onOffsetUpdate,
@@ -41,6 +42,8 @@ export function useOffset({
   const currentElementRef = useMainThreadRef<MainThread.Element | null>(null);
   const currentIndexRef = useMainThreadRef<number>(0);
   const onCompleteRef = useMainThreadRef<boolean | null>(null);
+  const state = useSlideStore((state) => state);
+
   const { animate, cancel: cancelAnimate } = useAnimate();
   function updateIndex(index: number) {
     const offset = index * itemWidth;
@@ -123,13 +126,16 @@ export function useOffset({
           } else if (allItems.length - 1 === currentIndex) {
             allItems[0].setAttribute('name', 'next');
           }
-          e.currentTarget.setAttribute('name', 'last');
+          // e.currentTarget.setAttribute('name', 'last');
           onCompleteRef.current = true;
           const lowerBound = itemWidth;
           const upperBound = -lowerBound;
           const normalizedOffset =
             (2 * (offset - upperBound)) / (lowerBound - upperBound) - 1;
           updateAllItems(currentIndex, Number(normalizedOffset.toFixed(2)));
+          if (currentIndex === dataLength - 1) {
+            runOnBackground(state.setSlides)(state.nextSlides);
+          }
         }
       },
       duration,

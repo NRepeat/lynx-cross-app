@@ -1,19 +1,8 @@
-import { WorkoutComponent } from './WorkoutComponent.jsx';
-import type { WorkoutType } from './Wods.jsx';
-import type {
-  BaseTouchEvent,
-  MainThread,
-  Target,
-  TouchEvent,
-} from '@lynx-js/types';
-import { type RefObject } from 'react';
+import type { BaseTouchEvent, MainThread } from '@lynx-js/types';
 import { useState } from '@lynx-js/react/legacy-react-runtime';
 import { useUpdateSwiperStyle } from '../../hooks/useUpdateSwiperStyle.jsx';
 import { useOffset } from '../../hooks/useOffset.jsx';
-import { runOnBackground } from '@lynx-js/react';
 import { useAnimate } from '../../hooks/useAnimate.jsx';
-import { useNavigate } from 'react-router';
-import data from '../../assets/home-data.js';
 function SwiperItem({
   pic,
   workout,
@@ -26,6 +15,7 @@ function SwiperItem({
   length,
   setCurrentIndex,
   isActive,
+  display,
 }: {
   index: number;
   pic: string;
@@ -34,11 +24,13 @@ function SwiperItem({
   transform: string;
   title: string;
   isActive: boolean;
+  display: 'block' | 'none';
   setCurrentIndex: (index: number) => void;
   isInitialLoad: boolean;
   opacity: number;
   length: number;
-  workout: (WorkoutType<'women', "Rx'd"> | WorkoutType<'men', "Rx'd">)[];
+  // workout: (WorkoutType<'women', "Rx'd"> | WorkoutType<'men', "Rx'd">)[];
+  workout: string;
 }) {
   const easing = (x: number) => {
     'main thread';
@@ -103,6 +95,7 @@ function SwiperItem({
     }
     open();
   };
+
   return (
     <view
       main-thread:bindtouchstart={handleTouchStart}
@@ -119,12 +112,13 @@ function SwiperItem({
         transform,
         zIndex: `${zIndex}`,
         opacity: `${opacity}`,
+        transitionDelay: '1s' as const,
       }}
       className={`swiper-item`}
     >
       <text class="title">{title}</text>
 
-      <WorkoutComponent workout={workout[0]} />
+      {/* <WorkoutComponent workout={workout[0]} /> */}
     </view>
   );
 }
