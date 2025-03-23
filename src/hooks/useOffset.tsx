@@ -126,7 +126,6 @@ export function useOffset({
           } else if (allItems.length - 1 === currentIndex) {
             allItems[0].setAttribute('name', 'next');
           }
-          // e.currentTarget.setAttribute('name', 'last');
           onCompleteRef.current = true;
           const lowerBound = itemWidth;
           const upperBound = -lowerBound;

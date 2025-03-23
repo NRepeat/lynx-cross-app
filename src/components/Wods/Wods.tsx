@@ -19,6 +19,7 @@ export type WorkoutType<
   subTitle: string;
   wodType: WodType;
   workoutTemplate: string;
+  timeCap?: number;
   variables: Record<T, Record<U, WorkoutVariablesType<T, U>>>;
   details: {
     gender: T;

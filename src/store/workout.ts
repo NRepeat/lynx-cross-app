@@ -30,16 +30,26 @@ type Action = {
 
 const womenScaledWorkout: WorkoutType<'women', 'Scaled'>[] = [
   {
-    title: 'WOD 2',
-    subTitle: 'CrossFit Open',
+    title: '25.3',
+    subTitle: 'Open Workouts',
     details: {
       gender: 'women',
       difficulty: 'Scaled',
     },
-    wodType: 'AMRAP',
-    workoutTemplate: '{thrusters} Thrusters, {doubleUnders} Double-unders',
+    wodType: 'For Time',
+    timeCap: 20,
+    workoutTemplate:
+      '{wallWalks} Wall Walks, {calorieRow} Calorie Row,{wallWalks} Wall Walks, {deadlifts} Deadlifts, {wallWalks} Wall Walks,{cleans} Cleans,{wallWalks} Wall Walks, {snatches} Snatches,{wallWalks} Wall Walks ,{calorieRow} Calorie Row',
     variables: {
-      women: { Scaled: { thrusters: '33395', doubleUnders: '100' } },
+      women: {
+        Scaled: {
+          'Wall Walks': '5',
+          'Calorie Row': '5-',
+          Deadlifts: '25  155-lb (70-kg)',
+          Cleans: '25  85-lb (38-kg)',
+          Snatches: '25  65-lb (29-kg)',
+        },
+      },
     },
   },
   {
@@ -71,42 +81,26 @@ const womenScaledWorkout: WorkoutType<'women', 'Scaled'>[] = [
 ];
 const womenRxWorkout: WorkoutType<'women', "Rx'd">[] = [
   {
-    title: 'WOD 2',
-    subTitle: 'CrossFit Open',
+    title: '25.3',
+    subTitle: 'Open Workouts',
     details: {
       gender: 'women',
       difficulty: "Rx'd",
     },
-    wodType: 'AMRAP',
-    workoutTemplate: '{thrusters} Thrusters, {doubleUnders} Double-unders',
+    wodType: 'For Time',
+    timeCap: 20,
+    workoutTemplate:
+      '{wallWalks} Wall Walks, {calorieRow} Calorie Row,{wallWalks} Wall Walks, {deadlifts} Deadlifts, {wallWalks} Wall Walks,{cleans} Cleans,{wallWalks} Wall Walks, {snatches} Snatches,{wallWalks} Wall Walks ,{calorieRow} Calorie Row',
     variables: {
-      women: { "Rx'd": { thrusters: '95', doubleUnders: '100' } },
-    },
-  },
-  {
-    title: 'WOD 1',
-    subTitle: 'CrossFit Open',
-    details: {
-      gender: 'women',
-      difficulty: "Rx'd",
-    },
-    wodType: 'AMRAP',
-    workoutTemplate: '{thrusters} Thrusters, {doubleUnders} Double-unders',
-    variables: {
-      women: { "Rx'd": { thrusters: '95', doubleUnders: '100' } },
-    },
-  },
-  {
-    title: 'WOD 3',
-    subTitle: 'CrossFit Open',
-    details: {
-      gender: 'women',
-      difficulty: "Rx'd",
-    },
-    wodType: 'AMRAP',
-    workoutTemplate: '{thrusters} Thrusters, {doubleUnders} Double-unders',
-    variables: {
-      women: { "Rx'd": { thrusters: '95', doubleUnders: '100' } },
+      women: {
+        "Rx'd": {
+          'Wall Walks': '5',
+          'Calorie Row': '5-',
+          Deadlifts: '25  225-lb (102-kg)',
+          Cleans: '25  135-lb (61-kg)',
+          Snatches: '25  95-lb (43-kg)',
+        },
+      },
     },
   },
 ];

@@ -5,6 +5,7 @@ import { useOffset } from '../../hooks/useOffset.jsx';
 import { useAnimate } from '../../hooks/useAnimate.jsx';
 import type { WorkoutType } from './Wods.jsx';
 import { WorkoutComponent } from './WorkoutComponent.jsx';
+import Time from './Time.jsx';
 function SwiperItem({
   title,
   index,
@@ -117,7 +118,11 @@ function SwiperItem({
       }}
       className={`swiper-item`}
     >
-      <text class="title">{title}</text>
+      <view className="title">
+        {/* <text>{workout.subTitle}</text> */}
+        <text>{title}</text>
+        {workout.timeCap && <Time time={workout.timeCap} />}
+      </view>
 
       <WorkoutComponent workout={workout} />
     </view>
