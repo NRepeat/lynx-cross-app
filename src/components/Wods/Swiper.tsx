@@ -14,7 +14,7 @@ export function Swiper({
 
   const swiperData = slides.map((slide, index) => {
     return {
-      ...slide,
+      wod: slide,
       opacity: (10 - index) / 10,
       zIndex: slides.length - index,
       transform: ` translateY(${10 * index}px)`,
@@ -26,9 +26,9 @@ export function Swiper({
       <view class="swiper-container">
         {swiperData.map((item, index) => {
           return (
-            item.workout && (
+            item.wod && (
               <SwiperItem
-                wod={item}
+                wod={item.wod}
                 length={slides.length}
                 key={index}
                 index={index}

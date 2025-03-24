@@ -3,32 +3,25 @@ import { useState } from '@lynx-js/react/legacy-react-runtime';
 import { useUpdateSwiperStyle } from '../../hooks/useUpdateSwiperStyle.jsx';
 import { useOffset } from '../../hooks/useOffset.jsx';
 import { useAnimate } from '../../hooks/useAnimate.jsx';
-// import type { WorkoutType } from './Wods.jsx';
 import { WorkoutComponent } from './WorkoutComponent.jsx';
 import Time from './Time.jsx';
+import type { Wod } from '../../store/workout.js';
 function SwiperItem({
-  title,
   index,
   opacity,
   itemWidth,
   zIndex,
   transform,
   length,
-  workout,
+  wod,
 }: {
   index: number;
-  pic: string;
   itemWidth: number;
   zIndex: number;
   transform: string;
-  title: string;
-  isActive: boolean;
-  display: 'block' | 'none';
-  setCurrentIndex: (index: number) => void;
-  isInitialLoad: boolean;
   opacity: number;
   length: number;
-  workout: [];
+  wod: Wod;
 }) {
   const easing = (x: number) => {
     'main thread';
@@ -115,9 +108,9 @@ function SwiperItem({
       className={`swiper-item`}
     >
       <view className="title">
-        {/* <text>{workout.subTitle}</text> */}
-        <text>{title}</text>
-        {/* {workout.timeCap && <Time time={workout.timeCap} />} */}
+        <text>{wod.type}</text>
+        <text>{wod.title}</text>
+        {wod.time && <Time time={wod.time} />}
       </view>
 
       {/* <WorkoutComponent workout={workout} /> */}
