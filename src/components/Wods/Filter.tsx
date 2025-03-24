@@ -1,28 +1,21 @@
 import React from 'react';
 import { useSlideStore } from '../../store/workout.js';
+import { runOnBackground } from '@lynx-js/react';
 
 const Filter = () => {
-  const { filters, toggleDifficultyFilters, toggleGenderFilters } =
-    useSlideStore((state) => state);
-  const handleTogleGenderFilters = (filter: 'man' | 'women') => {
-    toggleGenderFilters(filter);
-  };
-  const handleTogleDificultyFilters = (
-    difficulty: 'Rx' | 'Scaled' | 'Foundations' | undefined,
-  ) => {
-    toggleDifficultyFilters(difficulty);
-  };
+  const { filters, setFilters } = useSlideStore();
+
   return (
     <view className="filter">
       <view className="filter__options">
         <view
-          bindtap={() => handleTogleGenderFilters('man')}
+          bindtap={() => setFilters({ ...filters, gander: 'man' })}
           className={`button__options ${filters.gander === 'man' ? 'active' : ''}`}
         >
           <text>Man</text>
         </view>
         <view
-          bindtap={() => handleTogleGenderFilters('women')}
+          bindtap={() => setFilters({ ...filters, gander: 'women' })}
           className={` button__options ${filters.gander === 'women' ? 'active' : ''}`}
         >
           <text>Women</text>
@@ -30,13 +23,13 @@ const Filter = () => {
       </view>
       <view className="filter__options">
         <view
-          bindtap={() => handleTogleDificultyFilters('Rx')}
+          bindtap={() => setFilters({ ...filters, difficulty: 'Rx' })}
           className={`button__options ${filters.difficulty === 'Rx' ? 'active' : ''}`}
         >
           <text>Rx'd</text>
         </view>
         <view
-          bindtap={() => handleTogleDificultyFilters('Scaled')}
+          bindtap={() => setFilters({ ...filters, difficulty: 'Scaled' })}
           className={`button__options ${filters.difficulty === 'Scaled' ? 'active' : ''}`}
         >
           <text>Scaled</text>

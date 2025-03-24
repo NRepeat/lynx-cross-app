@@ -3,7 +3,7 @@ import { useState } from '@lynx-js/react/legacy-react-runtime';
 import { useUpdateSwiperStyle } from '../../hooks/useUpdateSwiperStyle.jsx';
 import { useOffset } from '../../hooks/useOffset.jsx';
 import { useAnimate } from '../../hooks/useAnimate.jsx';
-import type { WorkoutType } from './Wods.jsx';
+// import type { WorkoutType } from './Wods.jsx';
 import { WorkoutComponent } from './WorkoutComponent.jsx';
 import Time from './Time.jsx';
 function SwiperItem({
@@ -28,11 +28,7 @@ function SwiperItem({
   isInitialLoad: boolean;
   opacity: number;
   length: number;
-  workout:
-    | WorkoutType<'women', "Rx'd">
-    | WorkoutType<'men', "Rx'd">
-    | WorkoutType<'men', 'Scaled'>
-    | WorkoutType<'women', 'Scaled'>;
+  workout: [];
 }) {
   const easing = (x: number) => {
     'main thread';
@@ -121,10 +117,10 @@ function SwiperItem({
       <view className="title">
         {/* <text>{workout.subTitle}</text> */}
         <text>{title}</text>
-        {workout.timeCap && <Time time={workout.timeCap} />}
+        {/* {workout.timeCap && <Time time={workout.timeCap} />} */}
       </view>
 
-      <WorkoutComponent workout={workout} />
+      {/* <WorkoutComponent workout={workout} /> */}
     </view>
   );
 }

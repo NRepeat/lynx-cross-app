@@ -15,6 +15,7 @@ export default defineConfig({
   dev: {
     assetPrefix: 'http://192.168.0.100:3000',
   },
+
   server: {
     port: 3000,
     host: '0.0.0.0',

@@ -83,18 +83,15 @@
   background-color: aquamarine;
 }
 .swiper-item {
-  /* display: flex; */
   position: absolute;
-  /* grid-row: 1; */
   display: flex;
-  /* align-items: flex-end; */
   top: -10px;
   flex-direction: column;
   gap: 0.5rem;
   height: calc(70vh - 2rem);
   justify-content: start;
   padding-top: calc(var(--header-height) - 1rem);
-  background-color: var(--color-primary);
+  background-color: var(--color-base-300);
   border-top-right-radius: calc(var(--radius-box) + 1rem);
   border-top-right-radius: calc(var(--radius-box) + 1rem);
   border-bottom-right-radius: calc(var(--radius-box) + 1rem);
@@ -103,7 +100,7 @@
   animation: all 0.5s ease-in-out;
 }
 .swiper-item > .title {
-  padding: 0.5rem 2rem 0.5rem 2rem;
+  padding: 0.5rem 1rem 0.5rem 1rem;
   background-color: var(--color-primary-content);
   color: var(--color-primary);
   display: flex;
@@ -114,6 +111,20 @@
   overflow: hidden;
   /* text-transform: capitalize; */
 }
+.title > view {
+  display: flex;
+  gap: 0.5rem;
+  display: flex;
+  align-items: center;
+}
+.title > view > text {
+  color: var(--color-primary);
+  font-style: italic;
+  font-size: 2rem;
+  font-weight: 600;
+  text-align: left;
+}
+
 .swiper-item > .title > text {
   color: var(--color-primary);
   font-style: italic;
@@ -161,7 +172,8 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 1rem 2rem 1.5rem 2rem;
+  gap: 1rem;
+  /* padding: 1rem 2rem 1.5rem 2rem; */
   /* background-color: var(--color-primary); */
   color: var(--color-primary-content);
 }
@@ -189,4 +201,12 @@
   to {
     --border-angle: 360deg;
   }
+}
+
+.exercise {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+  border: 2px solid var(--color-base-300);
+  padding: 1rem;
 }

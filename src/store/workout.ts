@@ -1,258 +1,171 @@
 import { create } from 'zustand';
-import type { WorkoutType } from '../components/Wods/Wods.jsx';
 
+export type WodTypeEnum = 'For Time' | 'AMRAP' | 'EMOM' | 'Tabata';
+export type WodDifficultyType = 'Rx' | 'Scaled' | 'Foundations';
+export type WodGenderType = 'man' | 'women';
+export type WodWightType = { value: number; label: 'kg' | 'lb' };
+export type WodExerciseEquipmentType =
+  | 'bodyweight'
+  | 'dumbbell'
+  | 'barbell'
+  | 'kettlebell'
+  | 'medicine ball'
+  | 'pull-up bar';
+
+type WodExerciseNameType =
+  | 'Push up'
+  | 'Pull up'
+  | 'Air squat'
+  | 'Burpee'
+  | 'Sit up'
+  | 'Box jump'
+  | 'Wall ball'
+  | 'Row'
+  | 'Run'
+  | 'Bike'
+  | 'Double under'
+  | 'Thruster'
+  | 'Clean'
+  | 'Snatch'
+  | 'Deadlift'
+  | 'Back squat'
+  | 'Front squat'
+  | 'Overhead squat'
+  | 'Overhead press'
+  | 'Push press'
+  | 'Push jerk'
+  | 'Split jerk'
+  | 'Muscle up'
+  | 'Handstand push up'
+  | 'Handstand walk'
+  | 'Handstand hold'
+  | 'Handstand'
+  | 'Rope climb'
+  | 'Toes to bar';
+type WodExerciseType = {
+  name: WodExerciseNameType;
+  equipment?: WodExerciseEquipmentType;
+  link?: string;
+};
+export type WorkoutType = {
+  exercise: WodExerciseType;
+  reps: number | null;
+  weight: WodWightType | null;
+};
+interface WodType {
+  title: string;
+  time: number | null;
+  type: WodTypeEnum;
+  workout: WorkoutType[];
+  gender?: WodGenderType;
+  difficulty?: WodDifficultyType;
+}
+export class Wod implements WodType {
+  title: string;
+  description: string | undefined;
+  time: number | null;
+  type: WodTypeEnum;
+  workout: WorkoutType[];
+  difficulty: WodDifficultyType;
+  gender: WodGenderType | undefined;
+  constructor(
+    title: string,
+    description: string,
+    time: number | null,
+    type: WodTypeEnum,
+    workout: WorkoutType[],
+    difficulty: WodDifficultyType,
+    gender?: WodGenderType,
+  ) {
+    this.title = title;
+    this.description = description;
+    this.time = time;
+    this.type = type;
+    this.workout = workout;
+    this.difficulty = difficulty;
+    this.gender = gender;
+  }
+}
 type State = {
-  slides: {
-    title: string;
-    subTitle: string;
-    workout:
-      | WorkoutType<'women', "Rx'd">
-      | WorkoutType<'men', "Rx'd">
-      | WorkoutType<'men', 'Scaled'>
-      | WorkoutType<'women', 'Scaled'>;
-  }[];
-  nextSlides: {
-    title: string;
-    subTitle: string;
-  }[];
+  slides: Wod[];
   filters: {
-    gander?: 'man' | 'women';
-    difficulty?: 'Rx' | 'Scaled' | 'Foundations';
+    gander?: WodGenderType;
+    equipment?: WodExerciseEquipmentType;
+    exercise?: WodExerciseNameType;
+    difficulty?: WodDifficultyType;
+    wodType?: WodTypeEnum;
+    time?: number;
   };
-  toggleGenderFilters: (filter: State['filters']['gander']) => void;
-  toggleDifficultyFilters: (filter: State['filters']['difficulty']) => void;
   setFilters: (filters: State['filters']) => void;
 };
 
 type Action = {
   setSlides: (slides: State['slides']) => void;
 };
+const wods = Array.from({ length: 10 }, (_, i) => {
+  return new Wod(
+    `Wod ${i + 1}`,
+    `Description ${i + 1}`,
+    60,
+    'For Time',
 
-const womenScaledWorkout: WorkoutType<'women', 'Scaled'>[] = [
-  {
-    title: '25.3',
-    subTitle: 'Open Workouts',
-    details: {
-      gender: 'women',
-      difficulty: 'Scaled',
-    },
-    wodType: 'For Time',
-    timeCap: 20,
-    workoutTemplate:
-      '{wallWalks} Wall Walks, {calorieRow} Calorie Row,{wallWalks} Wall Walks, {deadlifts} Deadlifts, {wallWalks} Wall Walks,{cleans} Cleans,{wallWalks} Wall Walks, {snatches} Snatches,{wallWalks} Wall Walks ,{calorieRow} Calorie Row',
-    variables: {
-      women: {
-        Scaled: {
-          'Wall Walks': '5',
-          'Calorie Row': '5-',
-          Deadlifts: '25  155-lb (70-kg)',
-          Cleans: '25  85-lb (38-kg)',
-          Snatches: '25  65-lb (29-kg)',
-        },
+    [
+      {
+        exercise: { name: 'Push up', equipment: 'bodyweight' },
+        reps: 10,
+        weight: null,
       },
-    },
-  },
-  {
-    title: 'WOD 1',
-    subTitle: 'CrossFit Open',
-    details: {
-      gender: 'women',
-      difficulty: 'Scaled',
-    },
-    wodType: 'AMRAP',
-    workoutTemplate: '{thrusters} Thrusters, {doubleUnders} Double-unders',
-    variables: {
-      women: { Scaled: { thrusters: '95', doubleUnders: '100' } },
-    },
-  },
-  {
-    title: 'WOD 3',
-    subTitle: 'CrossFit Open',
-    details: {
-      gender: 'women',
-      difficulty: 'Scaled',
-    },
-    wodType: 'AMRAP',
-    workoutTemplate: '{thrusters} Thrusters, {doubleUnders} Double-unders',
-    variables: {
-      women: { Scaled: { thrusters: '95', doubleUnders: '100' } },
-    },
-  },
-];
-const womenRxWorkout: WorkoutType<'women', "Rx'd">[] = [
-  {
-    title: '25.3',
-    subTitle: 'Open Workouts',
-    details: {
-      gender: 'women',
-      difficulty: "Rx'd",
-    },
-    wodType: 'For Time',
-    timeCap: 20,
-    workoutTemplate:
-      '{wallWalks} Wall Walks, {calorieRow} Calorie Row,{wallWalks} Wall Walks, {deadlifts} Deadlifts, {wallWalks} Wall Walks,{cleans} Cleans,{wallWalks} Wall Walks, {snatches} Snatches,{wallWalks} Wall Walks ,{calorieRow} Calorie Row',
-    variables: {
-      women: {
-        "Rx'd": {
-          'Wall Walks': '5',
-          'Calorie Row': '5-',
-          Deadlifts: '25  225-lb (102-kg)',
-          Cleans: '25  135-lb (61-kg)',
-          Snatches: '25  95-lb (43-kg)',
-        },
+      {
+        exercise: { name: 'Pull up', equipment: 'pull-up bar' },
+        reps: 10,
+        weight: null,
       },
-    },
-  },
-];
+      {
+        exercise: {
+          name: 'Thruster',
+          equipment: 'barbell',
+          link: 'https://www.youtube.com/watch?v=4fKXv1fP6Ug',
+        },
+        reps: 10,
+        weight: { value: 50, label: 'kg' },
+      },
+    ],
+    `${i % 3 === 0 ? 'Rx' : i % 3 === 1 ? 'Scaled' : 'Foundations'}`,
+    `${i % 2 === 0 ? 'man' : 'women'}`,
+  );
+});
+export const filterWods = (wods: Wod[], filters: State['filters']): Wod[] => {
+  return wods.filter((wod) => {
+    if (filters.gander && wod.gender !== filters.gander) return false;
+    if (filters.difficulty && wod.difficulty !== filters.difficulty)
+      return false;
+    if (filters.wodType && wod.type !== filters.wodType) return false;
+    if (filters.time && wod.time && wod.time > filters.time) return false;
 
-const manRxWorkout: WorkoutType<'men', "Rx'd">[] = [
-  {
-    title: 'WOD 2',
-    subTitle: 'CrossFit Open',
-    details: {
-      gender: 'men',
-      difficulty: "Rx'd",
-    },
-    wodType: 'AMRAP',
-    workoutTemplate: '{thrusters} Thrusters, {doubleUnders} Double-unders',
-    variables: {
-      men: { "Rx'd": { thrusters: '295', doubleUnders: '2100' } },
-    },
-  },
-  {
-    title: 'WOD 1',
-    subTitle: 'CrossFit Open',
-    details: {
-      gender: 'men',
-      difficulty: "Rx'd",
-    },
-    wodType: 'AMRAP',
-    workoutTemplate: '{thrusters} Thrusters, {doubleUnders} Double-unders',
-    variables: {
-      men: { "Rx'd": { thrusters: '195', doubleUnders: '1100' } },
-    },
-  },
-  {
-    title: 'WOD 3',
-    subTitle: 'CrossFit Open',
-    details: {
-      gender: 'men',
-      difficulty: "Rx'd",
-    },
-    wodType: 'AMRAP',
-    workoutTemplate: '{thrusters} Thrusters, {doubleUnders} Double-unders',
-    variables: {
-      men: { "Rx'd": { thrusters: '195', doubleUnders: '1100' } },
-    },
-  },
-];
-const manScaledWorkout: WorkoutType<'men', 'Scaled'>[] = [
-  {
-    title: 'WOD 2',
-    subTitle: 'CrossFit Open',
-    details: {
-      gender: 'men',
-      difficulty: 'Scaled',
-    },
-    wodType: 'AMRAP',
-    workoutTemplate: '{thrusters} Thrusters, {doubleUnders} Double-unders',
-    variables: {
-      men: { Scaled: { thrusters: '295', doubleUnders: '2100' } },
-    },
-  },
-  {
-    title: 'WOD 1',
-    subTitle: 'CrossFit Open',
-    details: {
-      gender: 'men',
-      difficulty: 'Scaled',
-    },
-    wodType: 'AMRAP',
-    workoutTemplate: '{thrusters} Thrusters, {doubleUnders} Double-unders',
-    variables: {
-      men: { Scaled: { thrusters: '195', doubleUnders: '1100' } },
-    },
-  },
-  {
-    title: 'WOD 3',
-    subTitle: 'CrossFit Open',
-    details: {
-      gender: 'men',
-      difficulty: 'Scaled',
-    },
-    wodType: 'AMRAP',
-    workoutTemplate: '{thrusters} Thrusters, {doubleUnders} Double-unders',
-    variables: {
-      men: { Scaled: { thrusters: '195', doubleUnders: '1100' } },
-    },
-  },
-];
+    if (filters.equipment || filters.exercise) {
+      const matchesExercise = wod.workout.some(({ exercise }) => {
+        return (
+          (!filters.exercise || exercise.name === filters.exercise) &&
+          (!filters.equipment || exercise.equipment === filters.equipment)
+        );
+      });
+      if (!matchesExercise) return false;
+    }
+
+    return true;
+  });
+};
+
+export const useFilteredSlides = () => {
+  const { slides, filters } = useSlideStore();
+  return filterWods(slides, filters);
+};
+
 export const useSlideStore = create<State & Action>((set) => ({
-  slides: [...manRxWorkout, ...manScaledWorkout]
-    .filter((item) => item.details.difficulty === "Rx'd")
-    .map((workout) => ({
-      title: workout.title,
-      subTitle: workout.subTitle,
-      workout,
-    })),
+  slides: wods,
   filters: { difficulty: 'Rx', gander: 'man' },
-  nextSlides: [
-    { title: 'WOD 1', subTitle: 'CrossFit', workout: manRxWorkout[0] },
-  ],
 
   setFilters: (filters) => set({ filters }),
-
-  toggleGenderFilters: (filter) => {
-    set((state) => {
-      const { difficulty } = state.filters;
-
-      let filteredSlides;
-      if (filter === 'man') {
-        filteredSlides = [...manRxWorkout, ...manScaledWorkout].filter(
-          (workout) => workout.details.difficulty.includes(difficulty!),
-        );
-      } else {
-        filteredSlides = [...womenRxWorkout, ...womenScaledWorkout].filter(
-          (workout) => workout.details.difficulty.includes(difficulty!),
-        );
-      }
-
-      return {
-        filters: { ...state.filters, gander: filter },
-        slides: filteredSlides.map((workout) => ({
-          title: workout.title,
-          subTitle: workout.subTitle,
-          workout,
-        })),
-      };
-    });
-  },
-
-  toggleDifficultyFilters: (filter) => {
-    set((state) => {
-      const { gander } = state.filters;
-
-      let filteredSlides;
-      if (gander === 'man') {
-        filteredSlides = [...manRxWorkout, ...manScaledWorkout].filter(
-          (workout) => workout.details.difficulty.includes(filter!),
-        );
-      } else {
-        filteredSlides = [...womenRxWorkout, ...womenScaledWorkout].filter(
-          (workout) => workout.details.difficulty.includes(filter!),
-        );
-      }
-
-      return {
-        filters: { ...state.filters, difficulty: filter },
-        slides: filteredSlides.map((workout) => ({
-          title: workout.title,
-          subTitle: workout.subTitle,
-          workout,
-        })),
-      };
-    });
-  },
 
   setSlides: (slides) => set({ slides }),
 }));
