@@ -60,17 +60,18 @@ export function useOffset({
     switch (true) {
       case offset >= lowerBound:
         nearestPage = 1;
+
         break;
       case offset < 0 && Math.abs(offset) > lowerBound:
         nearestPage = -1;
         break;
     }
-    return nearestPage * itemWidth;
+    return nearestPage * (itemWidth + 50);
   }
 
   function updateOffset(offset: number, yOffset?: number) {
     'main thread';
-    const lowerBound = itemWidth;
+    const lowerBound = itemWidth + 50;
     const yLowerBound = itemWidth / 3;
     const yUpperBound = -yLowerBound;
     const upperBound = -lowerBound;
@@ -153,6 +154,7 @@ export function useOffset({
       onComplete: (offset) => {
         'main thread';
         if (offset !== 0) {
+          currentElementRef.current?.setStyleProperty('zIndex', '-10');
           touchStartXRef.current = 0;
           touchStartCurrentOffsetRef.current = 0;
           currentOffsetRef.current = 0;
@@ -168,6 +170,16 @@ export function useOffset({
           const upperBound = -lowerBound;
           const normalizedOffset =
             (2 * (offset - upperBound)) / (lowerBound - upperBound) - 1;
+          // animate({
+          //   from: 0,
+          //   duration: 100,
+          //   to: 1,
+          //   onUpdate: (value) => {
+          //     console.log('🚀 ~ handleTouchEnd ~ value:', value);
+
+          //     updateAllItems(currentIndex, Number(normalizedOffset * value));
+          //   },
+          // });
           updateAllItems(currentIndex, Number(normalizedOffset.toFixed(2)));
           if (currentIndex === dataLength - 1) {
             // runOnBackground(state.setSlides)(state.nextSlides);

@@ -45,14 +45,12 @@ export function useUpdateSwiperStyle() {
         duration: 200,
       });
     } else {
-      const maxRotation = 15;
-      const xMaxRotation = 10;
+      const maxRotation = 10;
       const rotateZ = (offset / lowerBound) * maxRotation;
 
       const rotate = ` rotateZ(${rotateZ}deg)`;
       containerRef.current?.setStyleProperties({
         transform: `translateX(${offset}px) translateY(${yOffset}px) ${rotate}`,
-        transformOrigin: '50% top',
       });
     }
   }
