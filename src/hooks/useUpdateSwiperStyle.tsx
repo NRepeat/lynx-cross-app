@@ -10,6 +10,7 @@ export function useUpdateSwiperStyle() {
     upperBound: number,
     lowerBound: number,
     currentIndex: number,
+    yOffset?: number,
   ) {
     'main thread';
 
@@ -44,7 +45,7 @@ export function useUpdateSwiperStyle() {
       });
     } else {
       containerRef.current?.setStyleProperties({
-        transform: `translateX(${offset}px)`,
+        transform: `translateX(${offset}px) translateY(${yOffset}px)`,
       });
     }
   }

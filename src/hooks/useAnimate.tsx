@@ -27,6 +27,15 @@ export const easings = {
     'main thread';
     return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
   },
+  bounce: (t: number): number => {
+    'main thread';
+    const overshoot = 1.1; // Насколько выше цели прыгнет (1.0 — цель)
+    if (t < 0.8) {
+      return t * (overshoot / 0.8); // Увеличиваем до 110%
+    } else {
+      return overshoot - ((t - 0.8) * (overshoot - 1)) / 0.2; // Возврат к 1
+    }
+  },
 };
 
 function animateInner(options: AnimationOptions) {

@@ -37,11 +37,13 @@ export function useOffset({
 }) {
   const touchStartXRef = useMainThreadRef<number>(0);
   const touchStartYRef = useMainThreadRef<number>(0);
+  const currentYOffsetRef = useMainThreadRef<number>(0);
   const touchStartCurrentOffsetRef = useMainThreadRef<number>(0);
   const currentOffsetRef = useMainThreadRef<number>(0);
   const currentElementRef = useMainThreadRef<MainThread.Element | null>(null);
   const currentIndexRef = useMainThreadRef<number>(0);
   const onCompleteRef = useMainThreadRef<boolean | null>(null);
+
   const state = useSlideStore((state) => state);
 
   const { animate, cancel: cancelAnimate } = useAnimate();
@@ -66,15 +68,28 @@ export function useOffset({
     return nearestPage * itemWidth;
   }
 
-  function updateOffset(offset: number) {
+  function updateOffset(offset: number, yOffset?: number) {
     'main thread';
     const lowerBound = itemWidth;
+    const yLowerBound = itemWidth / 3;
+    const yUpperBound = -yLowerBound;
     const upperBound = -lowerBound;
     const realOffset = Math.max(upperBound, Math.min(lowerBound, offset));
+    const ralYoffset = Math.max(
+      yUpperBound,
+      Math.min(yLowerBound, yOffset || 0),
+    );
     const normalizedOffset =
       (2 * (offset - upperBound)) / (lowerBound - upperBound) - 1;
     currentOffsetRef.current = realOffset;
-    onOffsetUpdate(realOffset, upperBound, lowerBound, currentIndex);
+    currentYOffsetRef.current = ralYoffset;
+    onOffsetUpdate(
+      realOffset,
+      upperBound,
+      lowerBound,
+      currentIndex,
+      ralYoffset,
+    );
     // updateAllItems(currentIndex, Number(normalizedOffset.toFixed(2)));
     const index = Math.round(-realOffset / itemWidth);
     if (currentIndex !== index) {
@@ -105,30 +120,34 @@ export function useOffset({
       item.getAttribute('name') === 'first' ||
       item.getAttribute('name') === 'next'
     ) {
-      updateOffset(touchStartCurrentOffsetRef.current + deltaX);
+      updateOffset(touchStartCurrentOffsetRef.current + deltaX, deltaY);
     }
   }
 
   function handleTouchEnd(e: MainThread.TouchEvent) {
     'main thread';
     touchStartXRef.current = 0;
+    touchStartYRef.current = 0;
     touchStartCurrentOffsetRef.current = 0;
-    const lowerBound = itemWidth;
-    const upperBound = -lowerBound;
-    console.log(Math.abs(currentOffsetRef.current), 'currentOffsetRef.current');
-    console.log(
-      itemWidth / 2 > currentOffsetRef.current,
-      'currentOffsetRef.current --------------',
-    );
-
+    const initialYOffset = currentYOffsetRef.current;
     animate({
       from: currentOffsetRef.current,
       to: calcNearestPage(currentOffsetRef.current),
 
       onUpdate: (offset) => {
         'main thread';
-        if (offset !== 0) {
-          updateOffset(offset);
+        if (true) {
+          const progress =
+            Math.abs(offset - currentOffsetRef.current) /
+            Math.abs(
+              calcNearestPage(currentOffsetRef.current) -
+                currentOffsetRef.current,
+            );
+          const yOffset = initialYOffset * (1 - progress);
+          currentOffsetRef.current = offset;
+          currentYOffsetRef.current = yOffset;
+
+          updateOffset(offset, yOffset);
         }
       },
       onComplete: (offset) => {
@@ -137,6 +156,7 @@ export function useOffset({
           touchStartXRef.current = 0;
           touchStartCurrentOffsetRef.current = 0;
           currentOffsetRef.current = 0;
+          currentYOffsetRef.current = 0;
           const allItems = lynx.querySelectorAll('.swiper-item');
           if (allItems[currentIndex + 1]) {
             allItems[currentIndex + 1].setAttribute('name', 'next');
