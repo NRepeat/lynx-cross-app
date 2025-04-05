@@ -29,7 +29,7 @@ export function useUpdateSwiperStyle() {
               : lowerBound * inverseProgress;
           const translateYValue = 10 * dataLength * progress;
           const opacityCurrent = 1;
-          const opacityEnd = Math.max(0.1, (10 - dataLength) / 10);
+          const opacityEnd = Math.max(0, (10 - dataLength) / 10);
           const currentOpacity =
             opacityCurrent + (opacityEnd - opacityCurrent) * progress;
           containerRef.current?.setStyleProperties({
