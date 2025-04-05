@@ -7,9 +7,7 @@ import { useAnimate } from '../../hooks/useAnimate.jsx';
 import type { BaseTouchEvent, MainThread } from '@lynx-js/types';
 
 const Wods = () => {
-  const [showFilter, setShowFilter] = React.useState(false);
   const { animate, cancel } = useAnimate();
-  const touchStartXRef = useMainThreadRef<number>(0);
   const touchStartYRef = useMainThreadRef<number>(0);
   const containerRef = useMainThreadRef<MainThread.Element>(null);
   const touchStartCurrentOffsetRef = useMainThreadRef<number>(0);

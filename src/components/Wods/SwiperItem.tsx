@@ -27,7 +27,7 @@ function SwiperItem({
     'main thread';
     return x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2;
   };
-  const [current, setCurrent] = useState(0);
+  const [current, setCurrent] = useState<number | null>();
   const { containerRef, updateSwiperStyle, updateAllItems } =
     useUpdateSwiperStyle();
   const { animate, cancel } = useAnimate();
@@ -106,10 +106,11 @@ function SwiperItem({
         opacity: `${opacity}`,
         transitionDelay: '1s' as const,
       }}
-      className={`swiper-item`}
+      className={`swiper-item `}
     >
       <view className="title">
         <text>{wod.type}</text>
+        <text>{current}</text>
         <text>{wod.title}</text>
         {wod.time && <Time time={wod.time} />}
       </view>

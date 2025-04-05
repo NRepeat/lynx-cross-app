@@ -80,8 +80,7 @@ export function useOffset({
       yUpperBound,
       Math.min(yLowerBound, yOffset || 0),
     );
-    const normalizedOffset =
-      (2 * (offset - upperBound)) / (lowerBound - upperBound) - 1;
+
     currentOffsetRef.current = realOffset;
     currentYOffsetRef.current = ralYoffset;
     onOffsetUpdate(
@@ -91,12 +90,8 @@ export function useOffset({
       currentIndex,
       ralYoffset,
     );
-    // updateAllItems(currentIndex, Number(normalizedOffset.toFixed(2)));
-    const index = Math.round(-realOffset / itemWidth);
-    if (currentIndex !== index) {
-      currentIndexRef.current = index;
-      runOnBackground(onIndexUpdate)(index);
-    }
+
+    currentIndexRef.current = currentIndex;
   }
 
   function handleTouchStart(e: MainThread.TouchEvent) {
@@ -106,6 +101,7 @@ export function useOffset({
     touchStartYRef.current = e.touches[0].clientY;
     currentElementRef.current = e.currentTarget;
     touchStartCurrentOffsetRef.current = currentOffsetRef.current;
+    currentElementRef.current?.setStyleProperty('transition', ' ');
     cancelAnimate();
   }
 
@@ -131,6 +127,8 @@ export function useOffset({
     touchStartYRef.current = 0;
     touchStartCurrentOffsetRef.current = 0;
     const initialYOffset = currentYOffsetRef.current;
+    const id = currentElementRef.current?.getAttribute('idSelector');
+    runOnBackground(onIndexUpdate)(Number(id));
     animate({
       from: currentOffsetRef.current,
       to: calcNearestPage(currentOffsetRef.current),
@@ -168,25 +166,14 @@ export function useOffset({
           onCompleteRef.current = true;
           const lowerBound = itemWidth;
           const upperBound = -lowerBound;
+
           const normalizedOffset =
             (2 * (offset - upperBound)) / (lowerBound - upperBound) - 1;
-          // animate({
-          //   from: 0,
-          //   duration: 100,
-          //   to: 1,
-          //   onUpdate: (value) => {
-          //     console.log('🚀 ~ handleTouchEnd ~ value:', value);
 
-          //     updateAllItems(currentIndex, Number(normalizedOffset * value));
-          //   },
-          // });
           updateAllItems(currentIndex, Number(normalizedOffset.toFixed(2)));
-          if (currentIndex === dataLength - 1) {
-            // runOnBackground(state.setSlides)(state.nextSlides);
-          }
         }
       },
-      duration,
+      duration: 100,
       easing: MTEasing,
     });
   }

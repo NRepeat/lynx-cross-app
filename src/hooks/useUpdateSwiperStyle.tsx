@@ -86,6 +86,7 @@ export function useUpdateSwiperStyle() {
         'z-index': `${allItems.length - relativePosition}`,
         transform: `translateY(${currentTranslateYValue.toFixed(1)}px)`,
         opacity: `${currentOpacity}`,
+        transition: 'transform 0.1s ease-in-out',
       });
     });
   }
