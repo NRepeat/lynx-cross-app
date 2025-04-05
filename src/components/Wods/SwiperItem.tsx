@@ -1,5 +1,5 @@
 import type { BaseTouchEvent, MainThread } from '@lynx-js/types';
-import { useState } from '@lynx-js/react/legacy-react-runtime';
+import { useEffect, useState } from '@lynx-js/react';
 import { useUpdateSwiperStyle } from '../../hooks/useUpdateSwiperStyle.jsx';
 import { useOffset } from '../../hooks/useOffset.jsx';
 import { useAnimate } from '../../hooks/useAnimate.jsx';
@@ -42,6 +42,7 @@ function SwiperItem({
       MTEasing: easing,
       currentIndex: index,
     });
+
   const handleTap = async (e: BaseTouchEvent<MainThread.Element>) => {
     'main thread';
     const openCard = e.currentTarget.getAttribute('open') === 'true';
@@ -113,7 +114,7 @@ function SwiperItem({
         {wod.time && <Time time={wod.time} />}
       </view>
 
-      {/* <WorkoutComponent wod={wod} /> */}
+      <WorkoutComponent wod={wod} />
     </view>
   );
 }

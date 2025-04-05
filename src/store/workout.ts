@@ -88,6 +88,8 @@ export class Wod implements WodType {
 }
 type State = {
   slides: Wod[];
+  reset: boolean;
+  setReset: (reset: boolean) => void;
   filters: {
     gander?: WodGenderType;
     equipment?: WodExerciseEquipmentType;
@@ -163,9 +165,11 @@ export const useFilteredSlides = () => {
 
 export const useSlideStore = create<State & Action>((set) => ({
   slides: wods,
+  reset: false,
+  setReset: (reset) => set({ reset }),
   filters: { difficulty: 'Rx', gander: 'man' },
 
-  setFilters: (filters) => set({ filters }),
+  setFilters: (filters) => set({ filters, reset: true }),
 
   setSlides: (slides) => set({ slides }),
 }));

@@ -1,5 +1,5 @@
 import './style.css';
-import { useState } from '@lynx-js/react';
+import { useEffect, useState } from '@lynx-js/react';
 import { SwiperItem } from './SwiperItem.jsx';
 
 import { useFilteredSlides, useSlideStore } from '../../store/workout.js';

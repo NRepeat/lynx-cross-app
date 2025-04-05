@@ -2,6 +2,7 @@ import {
   MainThreadRef,
   runOnBackground,
   runOnMainThread,
+  useEffect,
   useMainThreadRef,
   type Dispatch,
   type RefObject,
@@ -42,11 +43,26 @@ export function useOffset({
   const currentOffsetRef = useMainThreadRef<number>(0);
   const currentElementRef = useMainThreadRef<MainThread.Element | null>(null);
   const currentIndexRef = useMainThreadRef<number>(0);
-  const onCompleteRef = useMainThreadRef<boolean | null>(null);
-
-  const state = useSlideStore((state) => state);
-
   const { animate, cancel: cancelAnimate } = useAnimate();
+  const onCompleteRef = useMainThreadRef<boolean | null>(null);
+  const { reset, setReset } = useSlideStore();
+  function resetElements(reset: boolean) {
+    'main thread';
+    if (reset) {
+      const items = lynx.querySelectorAll('.swiper-item');
+      items.forEach((item, index) => {
+        if (index === currentIndex) {
+          item.setAttribute('name', 'first');
+        }
+        // item.setAttribute('name', index === 0 ? 'first' : '');
+      });
+      runOnBackground(setReset)(false);
+    }
+  }
+  useEffect(() => {
+    'main thread';
+    resetElements(reset);
+  }, [reset]);
   function updateIndex(index: number) {
     const offset = index * itemWidth;
     runOnMainThread(updateOffset)(offset);
@@ -96,8 +112,9 @@ export function useOffset({
 
   function handleTouchStart(e: MainThread.TouchEvent) {
     'main thread';
+    resetElements(reset);
     const isFirst = e.currentTarget.getAttribute('name') === 'first';
-    console.log('🚀 ~ handleTouchStart ~ isFirst:', isFirst);
+
     if (!isFirst) {
       return;
     }
@@ -112,7 +129,6 @@ export function useOffset({
   function handleTouchMove(e: MainThread.TouchEvent) {
     'main thread';
     const isFirst = e.currentTarget.getAttribute('name') === 'first';
-    console.log('🚀 ~ handleTouchStart ~ isFirst:', isFirst);
     if (!isFirst) {
       return;
     }
