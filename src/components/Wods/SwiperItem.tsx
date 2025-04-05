@@ -46,9 +46,7 @@ function SwiperItem({
     'main thread';
     const openCard = e.currentTarget.getAttribute('open') === 'true';
     const target = e.currentTarget;
-    const active =
-      target.getAttribute('name') === 'first' ||
-      target.getAttribute('name') === 'next';
+    const active = target.getAttribute('name') === 'first';
     function open() {
       if (active) {
         cancel();

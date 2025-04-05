@@ -25,15 +25,22 @@ export function useUpdateSwiperStyle() {
           const inverseProgress = 1 - progress;
           const translateXValue =
             offset === upperBound
-              ? upperBound * inverseProgress
-              : lowerBound * inverseProgress;
+              ? upperBound * inverseProgress * 2
+              : lowerBound * inverseProgress * 2;
+          console.log(
+            '🚀 ~ useUpdateSwiperStyle ~ translateXValue:',
+            translateXValue,
+          );
+
           const translateYValue = 10 * dataLength * progress;
           const opacityCurrent = 1;
           const opacityEnd = Math.max(0, (10 - dataLength) / 10);
           const currentOpacity =
             opacityCurrent + (opacityEnd - opacityCurrent) * progress;
           containerRef.current?.setStyleProperties({
-            transform: `translateX(${translateXValue}px) translateY(${translateYValue - 10}px) `,
+            transform: `translateX(${translateXValue}px)
+             
+              `,
             'z-index': `${-dataLength}`,
             opacity: `${currentOpacity}`,
 
@@ -42,7 +49,7 @@ export function useUpdateSwiperStyle() {
           containerRef.current?.setAttribute('open', `false`);
         },
 
-        duration: 200,
+        duration: 1200,
       });
     } else {
       const maxRotation = 10;
@@ -86,7 +93,7 @@ export function useUpdateSwiperStyle() {
         'z-index': `${allItems.length - relativePosition}`,
         transform: `translateY(${currentTranslateYValue.toFixed(1)}px)`,
         opacity: `${currentOpacity}`,
-        transition: 'transform 0.1s ease-in-out',
+        transition: 'transform 0.2s ease-in-out',
       });
     });
   }

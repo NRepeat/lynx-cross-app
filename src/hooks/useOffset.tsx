@@ -66,12 +66,12 @@ export function useOffset({
         nearestPage = -1;
         break;
     }
-    return nearestPage * (itemWidth + 50);
+    return nearestPage * (itemWidth + 60);
   }
 
   function updateOffset(offset: number, yOffset?: number) {
     'main thread';
-    const lowerBound = itemWidth + 50;
+    const lowerBound = itemWidth + 60;
     const yLowerBound = itemWidth / 3;
     const yUpperBound = -yLowerBound;
     const upperBound = -lowerBound;
@@ -96,7 +96,11 @@ export function useOffset({
 
   function handleTouchStart(e: MainThread.TouchEvent) {
     'main thread';
-
+    const isFirst = e.currentTarget.getAttribute('name') === 'first';
+    console.log('🚀 ~ handleTouchStart ~ isFirst:', isFirst);
+    if (!isFirst) {
+      return;
+    }
     touchStartXRef.current = e.touches[0].clientX;
     touchStartYRef.current = e.touches[0].clientY;
     currentElementRef.current = e.currentTarget;
@@ -107,7 +111,11 @@ export function useOffset({
 
   function handleTouchMove(e: MainThread.TouchEvent) {
     'main thread';
-
+    const isFirst = e.currentTarget.getAttribute('name') === 'first';
+    console.log('🚀 ~ handleTouchStart ~ isFirst:', isFirst);
+    if (!isFirst) {
+      return;
+    }
     const item = e.currentTarget;
     const touchMoveX = e.touches[0].clientX;
     const touchMoveY = e.touches[0].clientY;
@@ -123,6 +131,10 @@ export function useOffset({
 
   function handleTouchEnd(e: MainThread.TouchEvent) {
     'main thread';
+    const isFirst = e.currentTarget.getAttribute('name') === 'first';
+    if (!isFirst) {
+      return;
+    }
     touchStartXRef.current = 0;
     touchStartYRef.current = 0;
     touchStartCurrentOffsetRef.current = 0;
@@ -157,11 +169,12 @@ export function useOffset({
           touchStartCurrentOffsetRef.current = 0;
           currentOffsetRef.current = 0;
           currentYOffsetRef.current = 0;
+          currentElementRef.current?.setAttribute('name', '');
           const allItems = lynx.querySelectorAll('.swiper-item');
           if (allItems[currentIndex + 1]) {
-            allItems[currentIndex + 1].setAttribute('name', 'next');
+            allItems[currentIndex + 1].setAttribute('name', 'first');
           } else if (allItems.length - 1 === currentIndex) {
-            allItems[0].setAttribute('name', 'next');
+            allItems[0].setAttribute('name', 'first');
           }
           onCompleteRef.current = true;
           const lowerBound = itemWidth;
