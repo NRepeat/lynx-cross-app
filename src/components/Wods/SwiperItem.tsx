@@ -102,6 +102,7 @@ function SwiperItem({
         height: `${'65vh'}`,
         transform,
         zIndex: `${zIndex}`,
+
         opacity: `${opacity}`,
         transitionDelay: '1s' as const,
       }}

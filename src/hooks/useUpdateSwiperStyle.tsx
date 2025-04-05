@@ -36,6 +36,7 @@ export function useUpdateSwiperStyle() {
             transform: `translateX(${translateXValue}px) translateY(${translateYValue - 10}px) `,
             'z-index': `${-dataLength}`,
             opacity: `${currentOpacity}`,
+
             height: `65vh`,
           });
           containerRef.current?.setAttribute('open', `false`);
@@ -44,8 +45,14 @@ export function useUpdateSwiperStyle() {
         duration: 200,
       });
     } else {
+      const maxRotation = 15;
+      const xMaxRotation = 10;
+      const rotateZ = (offset / lowerBound) * maxRotation;
+
+      const rotate = ` rotateZ(${rotateZ}deg)`;
       containerRef.current?.setStyleProperties({
-        transform: `translateX(${offset}px) translateY(${yOffset}px)`,
+        transform: `translateX(${offset}px) translateY(${yOffset}px) ${rotate}`,
+        transformOrigin: '50% top',
       });
     }
   }
