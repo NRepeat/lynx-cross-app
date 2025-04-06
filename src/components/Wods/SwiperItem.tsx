@@ -5,7 +5,7 @@ import { useOffset } from '../../hooks/useOffset.jsx';
 import { useAnimate } from '../../hooks/useAnimate.jsx';
 import { WorkoutComponent } from './WorkoutComponent.jsx';
 import Time from './Time.jsx';
-import type { Wod } from '../../store/workout.js';
+import { useSlideStore, type Wod } from '../../store/workout.js';
 function SwiperItem({
   index,
   opacity,
@@ -27,7 +27,7 @@ function SwiperItem({
     'main thread';
     return x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2;
   };
-  const [current, setCurrent] = useState<number | null>();
+  const state = useSlideStore((state) => state);
   const { containerRef, updateSwiperStyle, updateAllItems } =
     useUpdateSwiperStyle();
   const { animate, cancel } = useAnimate();
@@ -35,7 +35,7 @@ function SwiperItem({
     useOffset({
       itemWidth,
       dataLength: length,
-      onIndexUpdate: setCurrent,
+      onIndexUpdate: state.setCurrentIndex,
       onOffsetUpdate: updateSwiperStyle,
       duration: 200,
       updateAllItems,
@@ -116,8 +116,8 @@ function SwiperItem({
         <view className="type__container">
           <text className="type">{wod.type}</text>
           <text className="time">{wod.time}m/3r</text>
+          <text className="rest"> {state.currentIndex}</text>
         </view>
-        {/* <text>{current}</text> */}
         {/* {wod.time && <Time time={wod.time} />} */}
       </view>
       <view class="description">

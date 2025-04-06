@@ -27,10 +27,6 @@ export function useUpdateSwiperStyle() {
             offset === upperBound
               ? upperBound * inverseProgress * 2
               : lowerBound * inverseProgress * 2;
-          console.log(
-            '🚀 ~ useUpdateSwiperStyle ~ translateXValue:',
-            translateXValue,
-          );
 
           const translateYValue = 10 * dataLength * progress;
           const opacityCurrent = 1;

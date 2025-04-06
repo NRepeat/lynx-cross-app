@@ -64,6 +64,7 @@ export class Wod implements WodType {
   title: string;
   description: string | undefined;
   time: number | null;
+  rounds: number | null;
   type: WodTypeEnum;
   workout: WorkoutType[];
   difficulty: WodDifficultyType;
@@ -72,6 +73,7 @@ export class Wod implements WodType {
     title: string,
     description: string,
     time: number | null,
+    rounds: number | null,
     type: WodTypeEnum,
     workout: WorkoutType[],
     difficulty: WodDifficultyType,
@@ -81,12 +83,15 @@ export class Wod implements WodType {
     this.description = description;
     this.time = time;
     this.type = type;
+    this.rounds = rounds;
     this.workout = workout;
     this.difficulty = difficulty;
     this.gender = gender;
   }
 }
 type State = {
+  currentIndex: number;
+  setCurrentIndex: (index: number) => void;
   slides: Wod[];
   reset: boolean;
   setReset: (reset: boolean) => void;
@@ -109,6 +114,7 @@ const wods = Array.from({ length: 115 }, (_, i) => {
     `Wod ${i + 1}`,
     `Description ${i + 1}`,
     60,
+    3,
     'For Time',
 
     [
@@ -166,6 +172,8 @@ export const useFilteredSlides = () => {
 export const useSlideStore = create<State & Action>((set) => ({
   slides: wods,
   reset: false,
+  currentIndex: 0,
+  setCurrentIndex: (index) => set({ currentIndex: index }),
   setReset: (reset) => set({ reset }),
   filters: { difficulty: 'Rx', gander: 'man' },
 
