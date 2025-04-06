@@ -131,11 +131,11 @@ const Wods = () => {
       <view className="wods">
         <Swiper duration={300} />
       </view>
-      <view class="control__panel">
+      {/* <view class="control__panel">
         <Buttons name="Filter" link="/filter" />
         <Buttons name="Sort" link="/sort" />
       </view>
-      <Modal />
+      <Modal /> */}
     </view>
   );
 };
