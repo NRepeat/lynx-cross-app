@@ -32,7 +32,7 @@ const Header = () => {
   };
   return (
     <>
-      <view className="header ">
+      <view className={`header  ${location.pathname === '/' ? 'home' : ''}`}>
         {title !== 'Home' || g.workoutIsStarted ? (
           <Icon
             className="header-back"
@@ -43,9 +43,14 @@ const Header = () => {
           <view style={{ width: '24px' }} />
         )}
         <text bindtap={handleHome} className="header__title">
-          {g.workoutIsStarted ? 'Workout' : title}
+          {g.workoutIsStarted && 'Workout'}
+          {title !== 'Home' && !g.workoutIsStarted ? title : ''}
         </text>
-        <Icon className="header-user" src={user} />
+        {title !== 'Home' && !g.workoutIsStarted ? (
+          <Icon className="header-user" src={user} />
+        ) : (
+          ''
+        )}
       </view>
     </>
   );

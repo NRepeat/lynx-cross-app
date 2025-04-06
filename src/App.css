@@ -195,7 +195,9 @@
   padding-left: 1rem;
   /* border-bottom: var(--item-border); */
 }
-
+.home > text {
+  color: black;
+}
 .header > text {
   font-size: 1.6rem;
   font-weight: 600;

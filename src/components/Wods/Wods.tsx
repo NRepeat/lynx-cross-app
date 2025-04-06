@@ -30,7 +30,7 @@ const Wods = () => {
       onUpdate: (value) => {
         modal?.setStyleProperties({
           opacity: '' + value * 1.1,
-          height: '' + value * 70 + 'vh',
+          height: '' + value * 100 + 'vh',
         });
       },
     });
@@ -47,7 +47,7 @@ const Wods = () => {
       onUpdate: (value) => {
         containerRef.current?.setStyleProperties({
           opacity: '' + value,
-          height: '' + value * 70 + 'vh',
+          height: '' + value * 100 + 'vh',
           transform: `translateY(0px))`,
         });
       },
@@ -106,12 +106,7 @@ const Wods = () => {
   };
   const handleStartWorkout = () => {
     'main thread';
-    console.log('start workout');
-    // nav(`/`);
     runOnBackground(g.setWorkoutIsStarted)(true);
-    // runOnBackground(setStartWorkout)(true);
-
-    // handleOpenModal();
   };
   const Buttons = ({
     link,
@@ -140,14 +135,16 @@ const Wods = () => {
         className={`modal`}
         id="modal"
         main-thread:ref={containerRef}
-        main-thread:bindtouchmove={handleMoveDownModal}
+        // main-thread:bindtouchmove={handleMoveDownModal}
         main-thread:bindtouchstart={handleTouchStart}
-        main-thread:bindtouchend={handleTouchEnd}
+        // main-thread:bindtouchend={handleTouchEnd}
       >
-        <view className="close__modal">
-          <text main-thread:bindtap={handleCloseModal}>Close</text>
+        <view class="modal__container">
+          <view className="close__modal">
+            <text main-thread:bindtap={handleCloseModal}>Close</text>
+          </view>
+          <Filter />
         </view>
-        <Filter />
       </view>
     );
   };

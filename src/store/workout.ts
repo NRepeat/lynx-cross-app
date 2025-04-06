@@ -120,7 +120,7 @@ const wods = Array.from({ length: 115 }, (_, i) => {
     [
       {
         exercise: { name: 'Push up', equipment: 'bodyweight' },
-        reps: 10,
+        reps: i % 3 === 0 ? 12 : i % 3 === 1 ? 10 : 5,
         weight: null,
       },
       {

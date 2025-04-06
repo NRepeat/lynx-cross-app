@@ -116,15 +116,27 @@ function SwiperItem({
         <view className="type__container">
           <text className="type">{wod.type}</text>
           <text className="time">{wod.time}m/3r</text>
-          <text className="rest"> {state.currentIndex}</text>
         </view>
         {/* {wod.time && <Time time={wod.time} />} */}
       </view>
       <view class="description">
-        <text> 50 Jumping Jack</text>
-        <text> 50 Sit-Ups</text>
-        <text> 20 Push-Ups</text>
-        <text> 20 Kettlebell Swing - 1,5 pood</text>
+        {wod.workout.map((item, index) => {
+          const { exercise, reps, weight } = item;
+          return (
+            <view key={`list-item-${index}`} class="description">
+              <text>
+                {exercise.name}-{reps}
+              </text>
+              {weight && (
+                <view class="">
+                  <text>
+                    {weight?.value}-{weight?.label}
+                  </text>
+                </view>
+              )}
+            </view>
+          );
+        })}
       </view>
 
       {/* <WorkoutComponent wod={wod} /> */}
