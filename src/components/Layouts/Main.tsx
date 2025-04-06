@@ -9,7 +9,7 @@ interface MainLayoutProps {
 const MainLayout: FC<MainLayoutProps> = ({ children }) => {
   return (
     <view className="main-layout">
-      {/* <Header /> */}
+      <Header />
       {children}
       {/* <Footer /> */}
     </view>

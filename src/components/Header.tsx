@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router';
 import chevronLeft from '../assets/chevron-left.png';
 import user from '../assets/user.png';
 import Icon from './ui/Icon.jsx';
+import { useSlideStore } from '../store/workout.js';
 const locationMap = {
   '/': 'Home',
   '/wods': 'Wods',
@@ -14,7 +15,9 @@ const locationMap = {
 
 const Header = () => {
   const location = useLocation();
+  console.log('🚀 ~ Header ~ location:', location);
   const nav = useNavigate();
+  const state = useSlideStore((state) => state);
   const title = locationMap[location.pathname as keyof typeof locationMap];
   const handleBack = () => {
     nav(-1);

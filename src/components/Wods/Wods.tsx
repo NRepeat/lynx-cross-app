@@ -9,7 +9,8 @@ import { useNavigate } from 'react-router';
 import { useState } from '@lynx-js/react/legacy-react-runtime';
 import { useSlideStore } from '../../store/workout.js';
 import useTimer from '../../hooks/useTimer.jsx';
-
+import chevronLeft from '../../assets/chevron-left.png';
+import StartWorkout from './Training.jsx';
 const Wods = () => {
   const { animate, cancel } = useAnimate();
   const touchStartYRef = useMainThreadRef<number>(0);
@@ -166,64 +167,9 @@ const Wods = () => {
       )}
 
       <Modal />
-      {startWorkout && <StartWorkout />}
+      {startWorkout && <StartWorkout setStartWorkout={setStartWorkout} />}
     </view>
   );
 };
 
 export default Wods;
-
-const StartWorkout = () => {
-  const state = useSlideStore((state) => state);
-  const wod = state.slides[state.currentIndex];
-  const { minutes, seconds, preCountdown, isPreCountdownActive, isRunning } =
-    useTimer(wod.time, true, 5);
-  console.log('🚀 ~ StartWorkout ~ wod:', wod.workout);
-  return (
-    <view className="start__workout__container">
-      <view class="start__workout__timer">
-        {isPreCountdownActive ? (
-          <text>{preCountdown}</text>
-        ) : (
-          <>
-            <text>
-              {minutes === 0 && isRunning ? wod.time : minutes}:{seconds}
-            </text>
-            <text>/ {wod.rounds}r</text>
-          </>
-        )}
-
-        {/* <text>{wod.rounds}</text> */}
-      </view>
-      <view class="start__workout__wod">
-        <scroll-view
-          scroll-orientation="vertical"
-          style={{
-            maxHeight: 'calc(100vh - 250px)',
-          }}
-          class="start__workout__description"
-        >
-          {[...wod.workout, ...wod.workout, ...wod.workout, ...wod.workout].map(
-            (item, index) => {
-              const { exercise, reps, weight } = item;
-              return (
-                <view key={`list-item-${index}`} class="start__workout__item">
-                  <text>
-                    {exercise.name}-{reps}
-                  </text>
-                  {weight && (
-                    <view class="workout_weight">
-                      <text>
-                        {weight?.value}-{weight?.label}
-                      </text>
-                    </view>
-                  )}
-                </view>
-              );
-            },
-          )}
-        </scroll-view>
-      </view>
-    </view>
-  );
-};

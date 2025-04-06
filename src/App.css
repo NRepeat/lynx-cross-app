@@ -175,12 +175,17 @@
   text-align: center;
 }
 .header {
+  width: 100%;
+  z-index: 1000;
+  height: var(--header-height);
+  position: absolute;
   display: flex;
+  top: 0;
   justify-content: space-between;
   align-items: end;
   min-height: var(--header-height);
 
-  background: var(--color-base-200);
+  background: transparent;
   color: white;
   font-size: 1.2rem;
   font-weight: 500;
@@ -212,6 +217,7 @@
   flex-direction: column;
   height: 100vh;
   background: var(--color-base-200);
+  position: relative;
 }
 .icon > image {
   width: 24px;
