@@ -49,10 +49,14 @@ function SwiperItem({
     const target = e.currentTarget;
     const active = target.getAttribute('name') === 'first';
     function open() {
+      'main thread';
+      cancel();
       if (active) {
         cancel();
         if (openCard) {
           animate({
+            easing: (t) => t,
+            duration: 100,
             from: 1,
             to: 0.65,
             onUpdate: (value) => {
@@ -63,12 +67,13 @@ function SwiperItem({
             onComplete: () => {
               target.setAttribute('open', 'false');
             },
-            duration: 200,
           });
         } else {
           animate({
+            easing: (t) => t,
+            duration: 100,
             from: 0.65,
-            to: 1.1,
+            to: 1.05,
             onUpdate: (value) => {
               target.setStyleProperties({
                 height: `${value * 100}vh`,
@@ -78,7 +83,6 @@ function SwiperItem({
             onComplete: () => {
               target.setAttribute('open', 'true');
             },
-            duration: 200,
           });
         }
       }
@@ -100,7 +104,7 @@ function SwiperItem({
         width: `${itemWidth}px`,
         height: `${'65vh'}`,
         transform,
-        zIndex: `${zIndex}`,
+        zIndex: `${opacity <= 0 ? -10 : zIndex}`,
 
         opacity: `${opacity}`,
         transitionDelay: '1s' as const,
@@ -108,13 +112,22 @@ function SwiperItem({
       className={`swiper-item `}
     >
       <view className="title">
-        <text>{wod.type}</text>
-        <text>{current}</text>
         <text>{wod.title}</text>
-        {wod.time && <Time time={wod.time} />}
+        <view className="type__container">
+          <text className="type">{wod.type}</text>
+          <text className="time">{wod.time}m/3r</text>
+        </view>
+        {/* <text>{current}</text> */}
+        {/* {wod.time && <Time time={wod.time} />} */}
+      </view>
+      <view class="description">
+        <text> 50 Jumping Jack</text>
+        <text> 50 Sit-Ups</text>
+        <text> 20 Push-Ups</text>
+        <text> 20 Kettlebell Swing - 1,5 pood</text>
       </view>
 
-      <WorkoutComponent wod={wod} />
+      {/* <WorkoutComponent wod={wod} /> */}
     </view>
   );
 }

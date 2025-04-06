@@ -98,10 +98,18 @@ const Wods = () => {
     touchStartYRef.current = 0;
   };
 
-  const Buttons = ({ link, name }: { name: string; link: string }) => {
+  const Buttons = ({
+    link,
+    name,
+    start,
+  }: {
+    name: string;
+    link: string;
+    start?: boolean;
+  }) => {
     return (
       <view
-        className="control__panel__buttons"
+        className={`control__panel__buttons ${start ? 'start__workout' : ''}`}
         main-thread:bindtouchstart={handleOpenModal}
       >
         <text>{name}</text>
@@ -131,11 +139,19 @@ const Wods = () => {
       <view className="wods">
         <Swiper duration={300} />
       </view>
-      {/* <view class="control__panel">
-        <Buttons name="Filter" link="/filter" />
-        <Buttons name="Sort" link="/sort" />
+      {/* <view class="start__workout">
+        <text>Start workout</text>
+      </view> */}
+      <view class="control__panel__container">
+        <Buttons start name="Start workout" link="/sort" />
+        <view class="control__panel">
+          <Buttons name="Filter" link="/filter" />
+          <Buttons name="Sort" link="/sort" />
+          <Buttons name="Sort" link="/sort" />
+          <Buttons name="Sort" link="/sort" />
+        </view>
       </view>
-      <Modal /> */}
+      {/* <Modal /> */}
     </view>
   );
 };

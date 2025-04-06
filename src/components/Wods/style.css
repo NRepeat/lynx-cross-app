@@ -51,7 +51,7 @@
 }
 
 .wods {
-  height: 70vh;
+  height: 75vh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -91,7 +91,7 @@
   height: calc(70vh - 2rem);
   justify-content: start;
   padding-top: calc(var(--header-height) - 1rem);
-  background-color: var(--color-base-300);
+  background: rgb(255, 255, 255);
   border-top-left-radius: calc(var(--radius-box) + 1rem);
   border-top-right-radius: calc(var(--radius-box) + 1rem);
   border-bottom-right-radius: calc(var(--radius-box) + 1rem);
@@ -101,17 +101,16 @@
   transition: box-shadow 0.5s ease-in-out;
 }
 .swiper-item > .title {
-  padding: 0.5rem 1rem 0.5rem 1rem;
-  background-color: var(--color-primary-content);
-  color: var(--color-primary);
+  /* padding: 0.5rem 1rem 0.5rem 1rem; */
+  /* background-color: 'ffffff'; */
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.2rem;
-  height: 5rem;
+  gap: 1rem;
+  flex-direction: column;
+  /* height: 5rem; */
   overflow: hidden;
-
-  /* text-transform: capitalize; */
 }
 .title > view {
   display: flex;
@@ -119,26 +118,83 @@
   display: flex;
   align-items: center;
 }
-.title > view > text {
-  color: var(--color-primary);
-  font-style: italic;
-  font-size: 2rem;
-  font-weight: 600;
-  text-align: left;
-}
 
+.swiper-item > .title > .type__container {
+  display: flex;
+  width: 100%;
+
+  justify-content: space-between;
+}
+.swiper-item > .title > .type__container > text {
+  padding-left: 0.5rem;
+  padding-right: 0.4rem;
+
+  width: 100%;
+  padding-bottom: 0.1em;
+  font-family: Karla, sans-serif;
+  letter-spacing: -0.04em;
+  font-size: 4rem;
+  line-height: 1.03;
+}
+.swiper-item > .title > .type__container > .type {
+  font-size: 3.5rem;
+  color: linear-gradient(90deg, rgb(46, 120, 76), rgb(24, 58, 38));
+
+  display: flex;
+}
+.swiper-item > .title > .type__container > .time {
+  font-size: 3.5rem;
+  text-align: center;
+
+  color: linear-gradient(90deg, rgb(41, 107, 68) rgb(7, 4, 3));
+}
 .swiper-item > .title > text {
-  color: var(--color-primary);
-  font-style: italic;
-  font-size: 2.7rem;
-  font-weight: 600;
-  text-align: left;
+  padding-left: 0.5rem;
+  padding-right: 0.4rem;
+  color: linear-gradient(90deg, rgb(46, 120, 76), rgb(7, 4, 3));
+  text-overflow: clip;
+  width: 250px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  text-align: center;
+  /* text-align: left; */
+  padding-bottom: 0.1em;
+  font-family: Karla, sans-serif;
+  letter-spacing: -0.04em;
+  font-size: 4rem;
+  line-height: 1.03;
 }
 .swiper-item.active {
   opacity: 1;
   transform: scale(1);
   z-index: 2;
   animation: slideIn 0.6s forwards;
+}
+.description {
+  padding-top: 0.4rem;
+  padding-left: 0.5rem;
+  padding-right: 0.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+.description > text {
+  /* color: var(--color-base-content); */
+  font-size: 2rem;
+  font-weight: 400;
+  text-align: left;
+  padding-bottom: 0.1em;
+  font-family: Karla, sans-serif;
+  letter-spacing: -0.04em;
+}
+.start__workout {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 0.5rem;
+  min-height: 5rem;
+  background: linear-gradient(90deg, rgb(46, 120, 76), rgb(7, 4, 3));
 }
 
 @keyframes slideIn {
@@ -222,16 +278,26 @@
   width: 100%;
   background-color: var(--color-base-200);
   gap: 1rem;
-  padding: 1rem;
-  padding-bottom: 3rem;
 }
+.control__panel__container {
+  display: flex;
+
+  flex-direction: column;
+  gap: 25px;
+  width: 100%;
+  padding: 1rem;
+  /* padding-bottom: 10rem; */
+}
+
 .control__panel__buttons {
   display: flex;
   gap: 1rem;
   border-radius: 1rem;
+  align-items: center;
+  justify-content: center;
+  /* height: 6rem; */
   padding: 1rem;
   width: 100%;
-  height: 10rem;
   border: 1px solid var(--color-base-300);
 }
 .control__panel__buttons > text {
