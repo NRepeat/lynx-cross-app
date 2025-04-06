@@ -3,12 +3,10 @@ import chevronLeft from '../../assets/chevron-left.png';
 import { useSlideStore } from '../../store/workout.js';
 import useCountdownTimer from '../../hooks/useTimer.jsx';
 import { useNavigate } from 'react-router';
-const StartWorkout = ({
-  setStartWorkout,
-}: {
-  setStartWorkout: (value: boolean) => void;
-}) => {
+import { useGlobal } from '../../store/global.js';
+const StartWorkout = () => {
   const state = useSlideStore((state) => state);
+  const g = useGlobal((state) => state);
   const wod = state.slides[state.currentIndex];
   const {
     minutes,
@@ -45,7 +43,7 @@ const StartWorkout = ({
   };
   const handleBack = () => {
     pauseTimer();
-    setStartWorkout(false);
+    g.setWorkoutIsStarted(false);
   };
   const [openControlPanel, setOpenControlPanel] = useState(false);
   return (

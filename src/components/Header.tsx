@@ -4,6 +4,7 @@ import chevronLeft from '../assets/chevron-left.png';
 import user from '../assets/user.png';
 import Icon from './ui/Icon.jsx';
 import { useSlideStore } from '../store/workout.js';
+import { useGlobal } from '../store/global.js';
 const locationMap = {
   '/': 'Home',
   '/wods': 'Wods',
@@ -18,34 +19,34 @@ const Header = () => {
   console.log('🚀 ~ Header ~ location:', location);
   const nav = useNavigate();
   const state = useSlideStore((state) => state);
+  const g = useGlobal((state) => state);
   const title = locationMap[location.pathname as keyof typeof locationMap];
   const handleBack = () => {
-    nav(-1);
+    g.setWorkoutIsStarted(false);
   };
   const handleHome = () => {
     nav('/');
   };
+  const handleNav = () => {
+    g.navigationFunction();
+  };
   return (
     <>
-      {title === 'Wods' ? (
-        <></>
-      ) : (
-        <view className="header ">
-          {title !== 'Home' ? (
-            <Icon
-              className="header-back"
-              bindtap={handleBack}
-              src={chevronLeft}
-            />
-          ) : (
-            <view style={{ width: '24px' }} />
-          )}
-          <text bindtap={handleHome} className="header__title">
-            {title}
-          </text>
-          <Icon className="header-user" src={user} />
-        </view>
-      )}
+      <view className="header ">
+        {title !== 'Home' || g.workoutIsStarted ? (
+          <Icon
+            className="header-back"
+            bindtap={handleBack}
+            src={chevronLeft}
+          />
+        ) : (
+          <view style={{ width: '24px' }} />
+        )}
+        <text bindtap={handleHome} className="header__title">
+          {g.workoutIsStarted ? 'Workout' : title}
+        </text>
+        <Icon className="header-user" src={user} />
+      </view>
     </>
   );
 };

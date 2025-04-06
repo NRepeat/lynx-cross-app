@@ -11,12 +11,14 @@ import { useSlideStore } from '../../store/workout.js';
 import useTimer from '../../hooks/useTimer.jsx';
 import chevronLeft from '../../assets/chevron-left.png';
 import StartWorkout from './Training.jsx';
+import { useGlobal } from '../../store/global.js';
 const Wods = () => {
   const { animate, cancel } = useAnimate();
   const touchStartYRef = useMainThreadRef<number>(0);
+  const g = useGlobal((state) => state);
   const containerRef = useMainThreadRef<MainThread.Element>(null);
   const touchStartCurrentOffsetRef = useMainThreadRef<number>(0);
-  const [startWorkout, setStartWorkout] = useState(false);
+  // const [startWorkout, setStartWorkout] = useState(false);
   const handleCloseModal = () => {
     'main thread';
 
@@ -106,7 +108,9 @@ const Wods = () => {
     'main thread';
     console.log('start workout');
     // nav(`/`);
-    runOnBackground(setStartWorkout)(true);
+    runOnBackground(g.setWorkoutIsStarted)(true);
+    // runOnBackground(setStartWorkout)(true);
+
     // handleOpenModal();
   };
   const Buttons = ({
@@ -149,7 +153,7 @@ const Wods = () => {
   };
   return (
     <view className="page">
-      {!startWorkout && (
+      {!g.workoutIsStarted && (
         <>
           <view className="wods">
             <Swiper duration={300} />
@@ -167,7 +171,7 @@ const Wods = () => {
       )}
 
       <Modal />
-      {startWorkout && <StartWorkout setStartWorkout={setStartWorkout} />}
+      {g.workoutIsStarted && <StartWorkout />}
     </view>
   );
 };
