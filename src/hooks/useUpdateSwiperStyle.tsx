@@ -91,7 +91,9 @@ export function useUpdateSwiperStyle() {
 
       item.setStyleProperties({
         'z-index': `${allItems.length - relativePosition}`,
+        // 'z-index': `${currentOpacity <= 0.1 ? -10 : allItems.length - relativePosition}`,
         transform: `translateY(${currentTranslateYValue.toFixed(1)}px)`,
+        display: `${relativePosition < 10 ? 'flex' : 'none'}`,
         opacity: `${currentOpacity}`,
         transition: 'transform 0.2s ease-in-out',
       });

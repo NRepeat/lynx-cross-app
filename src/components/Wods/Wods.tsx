@@ -5,12 +5,14 @@ import Filter from './Filter.jsx';
 import { useEffect, useMainThreadRef } from '@lynx-js/react';
 import { useAnimate } from '../../hooks/useAnimate.jsx';
 import type { BaseTouchEvent, MainThread } from '@lynx-js/types';
+import { useNavigate } from 'react-router';
 
 const Wods = () => {
   const { animate, cancel } = useAnimate();
   const touchStartYRef = useMainThreadRef<number>(0);
   const containerRef = useMainThreadRef<MainThread.Element>(null);
   const touchStartCurrentOffsetRef = useMainThreadRef<number>(0);
+  const nav = useNavigate();
 
   const handleCloseModal = () => {
     'main thread';
@@ -97,7 +99,9 @@ const Wods = () => {
     touchStartCurrentOffsetRef.current = 0;
     touchStartYRef.current = 0;
   };
-
+  const handleStartWorkout = () => {
+    nav(`/homee`);
+  };
   const Buttons = ({
     link,
     name,
@@ -109,8 +113,9 @@ const Wods = () => {
   }) => {
     return (
       <view
+        bindtap={handleStartWorkout}
         className={`control__panel__buttons ${start ? 'start__workout' : ''}`}
-        main-thread:bindtouchstart={handleOpenModal}
+        // main-thread:bindtouchstart={handleOpenModal}
       >
         <text>{name}</text>
       </view>
@@ -143,7 +148,7 @@ const Wods = () => {
         <text>Start workout</text>
       </view> */}
       <view class="control__panel__container">
-        <Buttons start name="Start workout" link="/sort" />
+        <Buttons start name="Start workout" link="/start" />
         <view class="control__panel">
           <Buttons name="Filter" link="/filter" />
           <Buttons name="Sort" link="/sort" />
@@ -151,7 +156,7 @@ const Wods = () => {
           <Buttons name="Sort" link="/sort" />
         </view>
       </view>
-      {/* <Modal /> */}
+      <Modal />
     </view>
   );
 };

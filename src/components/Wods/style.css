@@ -55,6 +55,8 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  z-index: 3;
+  /* overflow: hidden; */
 }
 .wods__title > text {
   color: var(--color-base-content);
@@ -281,7 +283,7 @@
 }
 .control__panel__container {
   display: flex;
-
+  z-index: 2;
   flex-direction: column;
   gap: 25px;
   width: 100%;

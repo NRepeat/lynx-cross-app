@@ -104,8 +104,8 @@ function SwiperItem({
         width: `${itemWidth}px`,
         height: `${'65vh'}`,
         transform,
+        display: `${index >= 10 ? 'none' : 'block'}`,
         zIndex: `${opacity <= 0 ? -10 : zIndex}`,
-
         opacity: `${opacity}`,
         transitionDelay: '1s' as const,
       }}

@@ -17,7 +17,7 @@ export function Swiper({
       wod: slide,
       opacity: (10 - index) / 10,
       zIndex: slides.length - index,
-      transform: ` translateY(${10 * index}px) `,
+      transform: `${index > 10 ? 'translateY(-100px)' : `translateY(${10 * index}px)`}  `,
     };
   });
 
