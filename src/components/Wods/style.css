@@ -386,12 +386,37 @@
 .start__workout__description {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  border-radius: 10px;
   padding: 1rem;
 }
-.start__workout__description > text {
+
+.start__workout__item {
+  background-color: rgba(240, 248, 255, 0.135);
+  margin-bottom: 0.2rem;
+  border-radius: 5px;
+  padding: 1rem;
+  position: relative;
+}
+.start__workout__item > text {
   color: var(--color-base-content);
-  font-size: 2.5rem;
+  font-size: 3.5rem;
+  font-weight: bold;
+  padding-bottom: 0.1em;
+  font-family: Karla, sans-serif;
+  letter-spacing: -0.04em;
+}
+
+.workout_weight {
+  position: absolute;
+  right: 0;
+  top: 0;
+  background-color: rgba(127, 255, 212, 0);
+  margin-right: 5px;
+}
+.workout_weight > text {
+  background-color: rgba(127, 255, 212, 0);
+  color: var(--color-base-content);
+  font-size: 1.5rem;
   font-weight: 400;
   padding-bottom: 0.1em;
   font-family: Karla, sans-serif;

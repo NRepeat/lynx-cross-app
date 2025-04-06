@@ -178,7 +178,7 @@ const StartWorkout = () => {
   const wod = state.slides[state.currentIndex];
   const { minutes, seconds, preCountdown, isPreCountdownActive, isRunning } =
     useTimer(wod.time, true, 5);
-  console.log('🚀 ~ StartWorkout ~ wod:', wod);
+  console.log('🚀 ~ StartWorkout ~ wod:', wod.workout);
   return (
     <view className="start__workout__container">
       <view class="start__workout__timer">
@@ -189,19 +189,40 @@ const StartWorkout = () => {
             <text>
               {minutes === 0 && isRunning ? wod.time : minutes}:{seconds}
             </text>
-            <text>/ {wod.rounds}</text>
+            <text>/ {wod.rounds}r</text>
           </>
         )}
 
         {/* <text>{wod.rounds}</text> */}
       </view>
       <view class="start__workout__wod">
-        <view class="start__workout__description">
-          <text> 50 Jumping Jack</text>
-          <text> 50 Sit-Ups</text>
-          <text> 20 Push-Ups</text>
-          <text> 20 Kettlebell Swing - 1,5 pood</text>
-        </view>
+        <scroll-view
+          scroll-orientation="vertical"
+          style={{
+            maxHeight: 'calc(100vh - 250px)',
+          }}
+          class="start__workout__description"
+        >
+          {[...wod.workout, ...wod.workout, ...wod.workout, ...wod.workout].map(
+            (item, index) => {
+              const { exercise, reps, weight } = item;
+              return (
+                <view key={`list-item-${index}`} class="start__workout__item">
+                  <text>
+                    {exercise.name}-{reps}
+                  </text>
+                  {weight && (
+                    <view class="workout_weight">
+                      <text>
+                        {weight?.value}-{weight?.label}
+                      </text>
+                    </view>
+                  )}
+                </view>
+              );
+            },
+          )}
+        </scroll-view>
       </view>
     </view>
   );

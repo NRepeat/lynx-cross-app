@@ -188,10 +188,6 @@ export function useOffset({
           currentElementRef.current?.setAttribute('name', '');
           const allItems = lynx.querySelectorAll('.swiper-item');
           if (allItems[currentIndex + 1]) {
-            console.log(
-              '🚀 ~ handleTouchEnd ~ currentIndex + 1:',
-              currentIndex + 1,
-            );
             allItems[currentIndex + 1].setAttribute('name', 'first');
             runOnBackground(onIndexUpdate)(Number(currentIndex + 1));
           } else if (allItems.length - 1 === currentIndex) {
