@@ -52,7 +52,7 @@ export type WorkoutType = {
   reps: number | null;
   weight: WodWightType | null;
 };
-interface WodType {
+export interface WodType {
   title: string;
   time: number | null;
   type: WodTypeEnum;
@@ -93,14 +93,15 @@ type State = {
   currentIndex: number;
   setCurrentIndex: (index: number) => void;
   slides: Wod[];
+  availableFilters: Map<string, Set<string>>;
   reset: boolean;
   setReset: (reset: boolean) => void;
   filters: {
-    gander?: WodGenderType;
-    equipment?: WodExerciseEquipmentType;
-    exercise?: WodExerciseNameType;
-    difficulty?: WodDifficultyType;
-    wodType?: WodTypeEnum;
+    gender?: WodGenderType[];
+    equipment?: WodExerciseEquipmentType[];
+    exercise?: WodExerciseNameType[];
+    difficulty?: WodDifficultyType[];
+    wodType?: WodTypeEnum[];
     time?: number;
   };
   setFilters: (filters: State['filters']) => void;
@@ -115,7 +116,7 @@ const wods = Array.from({ length: 115 }, (_, i) => {
     `Description ${i + 1}`,
     60,
     3,
-    'For Time',
+    i % 3 === 0 ? 'For Time' : i % 3 === 1 ? 'AMRAP' : 'EMOM',
 
     [
       {
@@ -143,40 +144,107 @@ const wods = Array.from({ length: 115 }, (_, i) => {
   );
 });
 export const filterWods = (wods: Wod[], filters: State['filters']): Wod[] => {
-  return wods.filter((wod) => {
-    if (filters.gander && wod.gender !== filters.gander) return false;
-    if (filters.difficulty && wod.difficulty !== filters.difficulty)
-      return false;
-    if (filters.wodType && wod.type !== filters.wodType) return false;
-    if (filters.time && wod.time && wod.time > filters.time) return false;
+  if (!filters || Object.keys(filters).length === 0) {
+    return wods;
+  }
 
-    if (filters.equipment || filters.exercise) {
-      const matchesExercise = wod.workout.some(({ exercise }) => {
-        return (
-          (!filters.exercise || exercise.name === filters.exercise) &&
-          (!filters.equipment || exercise.equipment === filters.equipment)
-        );
+  return wods.filter((wod) => {
+    // Gender filter (fixed typo from 'gander' to 'gender')
+    if (
+      filters.gender &&
+      filters.gender.length > 0 &&
+      !filters.gender.includes(wod.gender!)
+    ) {
+      return false;
+    }
+
+    // Difficulty filter
+    if (
+      filters.difficulty &&
+      filters.difficulty.length > 0 &&
+      !filters.difficulty.includes(wod.difficulty)
+    ) {
+      return false;
+    }
+
+    // WOD type filter
+    if (
+      filters.wodType &&
+      filters.wodType.length > 0 &&
+      !filters.wodType.includes(wod.type)
+    ) {
+      return false;
+    }
+
+    // Time filter
+    if (filters.time && wod.time! > filters.time) {
+      return false;
+    }
+
+    // Exercise and equipment filters
+    if (filters.exercise || filters.equipment) {
+      const matchesExerciseFilters = wod.workout.some(({ exercise }) => {
+        const exerciseMatch =
+          !filters.exercise || filters.exercise.includes(exercise.name);
+        const equipmentMatch =
+          !filters.equipment || filters.equipment.includes(exercise.equipment!);
+
+        return exerciseMatch && equipmentMatch;
       });
-      if (!matchesExercise) return false;
+
+      if (!matchesExerciseFilters) {
+        return false;
+      }
     }
 
     return true;
   });
 };
 
+const generateAvailableFilters = (wods: Wod[]): Map<string, Set<string>> => {
+  const filtersMap = new Map<string, Set<string>>();
+
+  // Initialize with empty sets
+  filtersMap.set('difficulty', new Set<string>());
+  filtersMap.set('gender', new Set<string>());
+  filtersMap.set('wodType', new Set<string>());
+  filtersMap.set('equipment', new Set<string>());
+  filtersMap.set('exercise', new Set<string>());
+
+  wods.forEach((wod) => {
+    // Add wod properties to respective filter sets
+    filtersMap.get('difficulty')?.add(wod.difficulty);
+    filtersMap.get('gender')?.add(wod.gender ? wod.gender : '');
+    filtersMap.get('wodType')?.add(wod.type);
+
+    // Add exercise properties
+    wod.workout.forEach((item) => {
+      filtersMap
+        .get('equipment')
+        ?.add(item.exercise.equipment ? item.exercise.equipment : '');
+      filtersMap.get('exercise')?.add(item.exercise.name);
+    });
+  });
+
+  return filtersMap;
+};
+
+const availableFilters = generateAvailableFilters(wods);
+
+console.log('🚀 ~ availableFilters:', Array.from(availableFilters));
+
 export const useFilteredSlides = () => {
   const { slides, filters } = useSlideStore();
   return filterWods(slides, filters);
 };
-
 export const useSlideStore = create<State & Action>((set) => ({
   slides: wods,
   reset: false,
   currentIndex: 0,
   setCurrentIndex: (index) => set({ currentIndex: index }),
   setReset: (reset) => set({ reset }),
-  filters: { difficulty: 'Rx', gander: 'man' },
-
+  filters: { difficulty: ['Rx'], gender: ['man', 'women'] },
+  availableFilters: availableFilters,
   setFilters: (filters) => set({ filters, reset: true }),
 
   setSlides: (slides) => set({ slides }),

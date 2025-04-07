@@ -6,6 +6,7 @@ import { useAnimate } from '../../hooks/useAnimate.jsx';
 import { WorkoutComponent } from './WorkoutComponent.jsx';
 import Time from './Time.jsx';
 import { useSlideStore, type Wod } from '../../store/workout.js';
+import { useGlobal } from '../../store/global.js';
 function SwiperItem({
   index,
   opacity,
@@ -28,6 +29,7 @@ function SwiperItem({
     return x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2;
   };
   const state = useSlideStore((state) => state);
+  const g = useGlobal((state) => state);
   const { containerRef, updateSwiperStyle, updateAllItems } =
     useUpdateSwiperStyle();
   const { animate, cancel } = useAnimate();
@@ -42,7 +44,6 @@ function SwiperItem({
       MTEasing: easing,
       currentIndex: index,
     });
-
   const handleTap = async (e: BaseTouchEvent<MainThread.Element>) => {
     'main thread';
     const openCard = e.currentTarget.getAttribute('open') === 'true';
@@ -126,14 +127,12 @@ function SwiperItem({
             <view key={`list-item-${index}`} class="description">
               <text>
                 {exercise.name}-{reps}
-              </text>
-              {weight && (
-                <view class="">
-                  <text>
-                    {weight?.value}-{weight?.label}
+                {weight && (
+                  <text class="weight">
+                    /{weight?.value}-{weight?.label}
                   </text>
-                </view>
-              )}
+                )}
+              </text>
             </view>
           );
         })}

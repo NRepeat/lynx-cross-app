@@ -4,6 +4,7 @@ import { useSlideStore } from '../../store/workout.js';
 import useCountdownTimer from '../../hooks/useTimer.jsx';
 import { useNavigate } from 'react-router';
 import { useGlobal } from '../../store/global.js';
+import { useEffect } from '@lynx-js/react';
 const StartWorkout = () => {
   const state = useSlideStore((state) => state);
   const g = useGlobal((state) => state);
@@ -20,8 +21,12 @@ const StartWorkout = () => {
     startTimer,
     skipPreCountdown,
   } = useCountdownTimer(wod.time, true, 5);
-  console.log('🚀 ~ StartWorkout ~ wod:', wod.workout);
   const nav = useNavigate();
+  useEffect(() => {
+    if (wod) {
+      g.setCurrentWorkout(wod);
+    }
+  }, [g.workoutIsStarted]);
   const Buttons = ({
     name,
     onClick,

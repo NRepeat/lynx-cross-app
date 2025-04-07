@@ -141,7 +141,10 @@ const Wods = () => {
       >
         <view class="modal__container">
           <view className="close__modal">
-            <text main-thread:bindtap={handleCloseModal}>Close</text>
+            <view main-thread:bindtap={handleCloseModal}>
+              <text>X</text>
+            </view>
+            <text class="filters__heading">Filters</text>
           </view>
           <Filter />
         </view>
