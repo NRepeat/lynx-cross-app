@@ -59,10 +59,7 @@ export function useOffset({
       runOnBackground(setReset)(false);
     }
   }
-  useEffect(() => {
-    'main thread';
-    resetElements(reset);
-  }, [reset]);
+
   function updateIndex(index: number) {
     const offset = index * itemWidth;
     runOnMainThread(updateOffset)(offset);
