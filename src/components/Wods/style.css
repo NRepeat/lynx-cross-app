@@ -346,6 +346,22 @@
   width: 100%;
   border: 1px solid var(--color-base-300);
 }
+.user_button {
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  max-width: 48px;
+  height: 48px;
+  padding: 0.1rem;
+}
+.like__button {
+  overflow: hidden;
+  width: 100%;
+  height: fit-content;
+  max-width: 48px;
+  max-height: 48px;
+  padding: 0.1rem;
+}
 .control__panel__buttons > text {
   color: white;
   font-size: 1.5rem;
@@ -375,7 +391,14 @@
   background-color: var(--color-base-200);
   border-radius: 1rem;
 }
-
+.button__content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-height: 48px;
+  width: 48px;
+  overflow: hidden;
+}
 .close__modal {
   position: relative;
   top: 10px;

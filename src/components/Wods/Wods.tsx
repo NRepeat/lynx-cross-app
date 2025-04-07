@@ -5,13 +5,12 @@ import Filter from './Filter.jsx';
 import { runOnBackground, useEffect, useMainThreadRef } from '@lynx-js/react';
 import { useAnimate } from '../../hooks/useAnimate.jsx';
 import type { BaseTouchEvent, MainThread } from '@lynx-js/types';
-import { useNavigate } from 'react-router';
-import { useState } from '@lynx-js/react/legacy-react-runtime';
-import { useSlideStore } from '../../store/workout.js';
-import useTimer from '../../hooks/useTimer.jsx';
-import chevronLeft from '../../assets/chevron-left.png';
+import user from '../../assets/user.png';
+
 import StartWorkout from './Training.jsx';
 import { useGlobal } from '../../store/global.js';
+import Icon from '../ui/Icon.jsx';
+import LikeIcon from '../LikeIcon.jsx';
 const Wods = () => {
   const { animate, cancel } = useAnimate();
   const touchStartYRef = useMainThreadRef<number>(0);
@@ -112,19 +111,26 @@ const Wods = () => {
     link,
     name,
     start,
+    children,
+    onClick,
+    like,
+    userIcon,
   }: {
-    name: string;
-    link: string;
+    userIcon?: boolean;
+    like?: boolean;
+    name?: string;
+    link?: string;
     start?: boolean;
+    children?: React.ReactNode;
+    onClick?: () => void;
   }) => {
     return (
       <view
-        className={`control__panel__buttons ${start ? 'start__workout' : ''}`}
-        main-thread:bindtouchstart={
-          start ? handleStartWorkout : handleOpenModal
-        }
+        className={`control__panel__buttons ${start ? 'start__workout' : ''} ${like ? 'like__button' : ''}  ${userIcon ? 'user_button' : ''} `}
+        main-thread:bindtouchstart={onClick}
       >
-        <text>{name}</text>
+        {name && <text>{name}</text>}
+        {children && <view class="button__content">{children}</view>}
       </view>
     );
   };
@@ -159,12 +165,15 @@ const Wods = () => {
             <Swiper duration={300} />
           </view>
           <view class="control__panel__container">
-            <Buttons start name="Start workout" link="/start" />
+            <Buttons start name="Start workout" onClick={handleStartWorkout} />
             <view class="control__panel">
-              <Buttons name="Filter" link="/filter" />
-              <Buttons name="Sort" link="/sort" />
-              <Buttons name="Sort" link="/sort" />
-              <Buttons name="Sort" link="/sort" />
+              <Buttons name="Filter" onClick={handleOpenModal} />
+              <Buttons like>
+                <LikeIcon />
+              </Buttons>
+              <Buttons userIcon>
+                <Icon src={user} />
+              </Buttons>
             </view>
           </view>
         </>
