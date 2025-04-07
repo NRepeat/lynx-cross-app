@@ -1,16 +1,16 @@
 import {
+  type Dispatch,
   MainThreadRef,
+  type RefObject,
+  type SetStateAction,
   runOnBackground,
   runOnMainThread,
   useEffect,
   useMainThreadRef,
-  type Dispatch,
-  type RefObject,
-  type SetStateAction,
 } from '@lynx-js/react';
 import type { BaseTouchEvent, MainThread, Target } from '@lynx-js/types';
-import { useAnimate } from './useAnimate.jsx';
 import { useSlideStore } from '../store/workout.js';
+import { useAnimate } from './useAnimate.jsx';
 
 export function useOffset({
   onOffsetUpdate,

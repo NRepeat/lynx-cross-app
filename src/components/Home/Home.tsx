@@ -1,7 +1,7 @@
 import React from 'react';
-import ScrollView from './ScrollView.jsx';
 import { homePageData } from '../../assets/index.js';
 import { VerticalScrollItem } from './Item.jsx';
+import ScrollView from './ScrollView.jsx';
 
 const Home = () => {
   const Items = () =>

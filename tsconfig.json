@@ -15,5 +15,5 @@
       "@common/*": ["./src/common/*"]
     }
   },
-  "exclude": ["dist/"],
+  "exclude": ["dist/"]
 }

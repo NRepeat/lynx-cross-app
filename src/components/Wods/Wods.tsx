@@ -1,16 +1,16 @@
-import React from 'react';
+import type React from 'react';
 import './style.css';
-import { Swiper } from './Swiper.jsx';
-import Filter from './Filter.jsx';
 import { runOnBackground, useEffect, useMainThreadRef } from '@lynx-js/react';
-import { useAnimate } from '../../hooks/useAnimate.jsx';
 import type { BaseTouchEvent, MainThread } from '@lynx-js/types';
 import user from '../../assets/user.png';
+import { useAnimate } from '../../hooks/useAnimate.jsx';
+import Filter from './Filter.jsx';
+import { Swiper } from './Swiper.jsx';
 
-import StartWorkout from './Training.jsx';
 import { useGlobal } from '../../store/global.js';
-import Icon from '../ui/Icon.jsx';
 import LikeIcon from '../LikeIcon.jsx';
+import Icon from '../ui/Icon.jsx';
+import StartWorkout from './Training.jsx';
 const Wods = () => {
   const { animate, cancel } = useAnimate();
   const touchStartYRef = useMainThreadRef<number>(0);
@@ -76,7 +76,7 @@ const Wods = () => {
 
     const lowerBound = SystemInfo.pixelHeight / SystemInfo.pixelRatio;
 
-    let offset =
+    const offset =
       touchStartCurrentOffsetRef.current + scaledDeltaY * screenHeight;
 
     const realOffset = Math.max(0, Math.min(offset, screenHeight - lowerBound));

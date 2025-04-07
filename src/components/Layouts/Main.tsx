@@ -1,4 +1,5 @@
-import React, { type FC } from 'react';
+import type React from 'react';
+import type { FC } from 'react';
 import Footer from '../Footer.jsx';
 import Header from '../Header.jsx';
 

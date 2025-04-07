@@ -1,6 +1,6 @@
+import { runOnBackground } from '@lynx-js/react';
 import React from 'react';
 import { useSlideStore } from '../../store/workout.js';
-import { runOnBackground } from '@lynx-js/react';
 
 const Filter = () => {
   const { availableFilters, filters, setFilters } = useSlideStore();

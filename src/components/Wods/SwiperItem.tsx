@@ -1,12 +1,12 @@
-import type { BaseTouchEvent, MainThread } from '@lynx-js/types';
 import { useEffect, useState } from '@lynx-js/react';
-import { useUpdateSwiperStyle } from '../../hooks/useUpdateSwiperStyle.jsx';
-import { useOffset } from '../../hooks/useOffset.jsx';
+import type { BaseTouchEvent, MainThread } from '@lynx-js/types';
 import { useAnimate } from '../../hooks/useAnimate.jsx';
-import { WorkoutComponent } from './WorkoutComponent.jsx';
-import Time from './Time.jsx';
-import { useSlideStore, type Wod } from '../../store/workout.js';
+import { useOffset } from '../../hooks/useOffset.jsx';
+import { useUpdateSwiperStyle } from '../../hooks/useUpdateSwiperStyle.jsx';
 import { useGlobal } from '../../store/global.js';
+import { type Wod, useSlideStore } from '../../store/workout.js';
+import Time from './Time.jsx';
+import { WorkoutComponent } from './WorkoutComponent.jsx';
 function SwiperItem({
   index,
   opacity,

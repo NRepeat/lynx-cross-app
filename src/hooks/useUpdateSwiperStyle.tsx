@@ -74,7 +74,7 @@ export function useUpdateSwiperStyle() {
       const currentTranslateYValueStart = 10 * relativePosition;
       const currentTranslateYValueEnd = 10 * (relativePosition - 1);
 
-      let currentTranslateYValue =
+      const currentTranslateYValue =
         currentTranslateYValueStart +
         (currentTranslateYValueEnd - currentTranslateYValueStart) *
           Math.abs(normalizedOffset);

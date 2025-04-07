@@ -1,8 +1,8 @@
 // import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from '@lynx-js/react/legacy-react-runtime';
+import { useQuery } from '@tanstack/react-query';
 import { calculateEstimatedSize } from '../utils/utils.jsx';
 import ImageCard from './ImageCard.jsx';
-import { useQuery } from '@tanstack/react-query';
 const WorkoutsList = () => {
   // const query = useQuery({
   //   queryKey: ['wods'],

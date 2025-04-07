@@ -2,9 +2,9 @@ import React from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import chevronLeft from '../assets/chevron-left.png';
 import user from '../assets/user.png';
-import Icon from './ui/Icon.jsx';
-import { useSlideStore } from '../store/workout.js';
 import { useGlobal } from '../store/global.js';
+import { useSlideStore } from '../store/workout.js';
+import Icon from './ui/Icon.jsx';
 const locationMap = {
   '/': 'Home',
   '/wods': 'Wods',

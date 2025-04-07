@@ -220,8 +220,6 @@
 .swiper-item > view > .title > .type__container > .time {
   font-size: 3.5rem;
   text-align: center;
-
-  color: linear-gradient(90deg, rgb(41, 107, 68) rgb(7, 4, 3));
 }
 .swiper-item > view > .title > text {
   padding-left: 0.5rem;
@@ -549,9 +547,7 @@
   border-radius: 1rem;
   height: 100%;
 }
-.stop_timer {
-  background-color: 'red';
-}
+
 .open__control__panel {
   position: absolute;
   display: flex;

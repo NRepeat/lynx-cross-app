@@ -1,8 +1,8 @@
 import { useCallback } from '@lynx-js/react/legacy-react-runtime';
 import { useNavigate } from 'react-router';
+import check from '../../assets/check.png';
 import { calculateEstimatedSize } from '../../utils/utils.jsx';
 import Icon from '../ui/Icon.jsx';
-import check from '../../assets/check.png';
 export const VerticalScrollItem = (props: { title: string; link: string }) => {
   const nav = useNavigate();
   const handleNavigate = useCallback(() => {

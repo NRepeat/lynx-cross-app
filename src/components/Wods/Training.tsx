@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import chevronLeft from '../../assets/chevron-left.png';
-import { useFilteredSlides, useSlideStore } from '../../store/workout.js';
-import useCountdownTimer from '../../hooks/useTimer.jsx';
-import { useNavigate } from 'react-router';
-import { useGlobal } from '../../store/global.js';
 import { useEffect } from '@lynx-js/react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router';
+import chevronLeft from '../../assets/chevron-left.png';
+import useCountdownTimer from '../../hooks/useTimer.jsx';
+import { useGlobal } from '../../store/global.js';
+import { useFilteredSlides, useSlideStore } from '../../store/workout.js';
 const StartWorkout = () => {
   const state = useSlideStore((state) => state);
   const g = useGlobal((state) => state);
