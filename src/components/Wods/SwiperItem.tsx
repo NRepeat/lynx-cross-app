@@ -112,32 +112,41 @@ function SwiperItem({
       }}
       className={`swiper-item `}
     >
-      <view className="title">
-        <text>{wod.title}</text>
-        <view className="type__container">
-          <text className="type">{wod.type}</text>
-          <text className="time">{wod.time}m/3r</text>
+      <view class="swiper-item__container">
+        <view className="title">
+          <text>{wod.title}</text>
+          <view className="type__container">
+            <text className="type">{wod.type}</text>
+            <text className="time">{wod.time}m/3r</text>
+          </view>
+          {/* {wod.time && <Time time={wod.time} />} */}
         </view>
-        {/* {wod.time && <Time time={wod.time} />} */}
+        <view class="description">
+          {wod.workout.map((item, index) => {
+            const { exercise, reps, weight } = item;
+            return (
+              <view key={`list-item-${index}`} class="description">
+                <text>
+                  {exercise.name}-{reps}
+                  {weight && (
+                    <text class="weight">
+                      /{weight?.value}-{weight?.label}
+                    </text>
+                  )}
+                </text>
+              </view>
+            );
+          })}
+        </view>
       </view>
-      <view class="description">
-        {wod.workout.map((item, index) => {
-          const { exercise, reps, weight } = item;
-          return (
-            <view key={`list-item-${index}`} class="description">
-              <text>
-                {exercise.name}-{reps}
-                {weight && (
-                  <text class="weight">
-                    /{weight?.value}-{weight?.label}
-                  </text>
-                )}
-              </text>
-            </view>
-          );
-        })}
+      <view class="info_container">
+        <view class="info_text_container">
+          <text>{wod.difficulty}</text>
+        </view>
+        <view class="info_text_container">
+          <text>{wod.gender}</text>
+        </view>
       </view>
-
       {/* <WorkoutComponent wod={wod} /> */}
     </view>
   );
