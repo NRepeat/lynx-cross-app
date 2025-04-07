@@ -29,7 +29,7 @@ function SwiperItem({
     return x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2;
   };
   const state = useSlideStore((state) => state);
-  const g = useGlobal((state) => state);
+  console.log(state.currentIndex, 'asd---------------------');
   const { containerRef, updateSwiperStyle, updateAllItems } =
     useUpdateSwiperStyle();
   const { animate, cancel } = useAnimate();

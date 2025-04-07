@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import chevronLeft from '../../assets/chevron-left.png';
-import { useSlideStore } from '../../store/workout.js';
+import { useFilteredSlides, useSlideStore } from '../../store/workout.js';
 import useCountdownTimer from '../../hooks/useTimer.jsx';
 import { useNavigate } from 'react-router';
 import { useGlobal } from '../../store/global.js';
@@ -8,7 +8,8 @@ import { useEffect } from '@lynx-js/react';
 const StartWorkout = () => {
   const state = useSlideStore((state) => state);
   const g = useGlobal((state) => state);
-  const wod = state.slides[state.currentIndex];
+  const slides = useFilteredSlides();
+  const wod = slides[state.currentIndex];
   const {
     minutes,
     seconds,
@@ -21,7 +22,6 @@ const StartWorkout = () => {
     startTimer,
     skipPreCountdown,
   } = useCountdownTimer(wod.time, true, 5);
-  const nav = useNavigate();
   useEffect(() => {
     if (wod) {
       g.setCurrentWorkout(wod);

@@ -231,12 +231,11 @@ const generateAvailableFilters = (wods: Wod[]): Map<string, Set<string>> => {
 
 const availableFilters = generateAvailableFilters(wods);
 
-console.log('🚀 ~ availableFilters:', Array.from(availableFilters));
-
 export const useFilteredSlides = () => {
   const { slides, filters } = useSlideStore();
   return filterWods(slides, filters);
 };
+
 export const useSlideStore = create<State & Action>((set) => ({
   slides: wods,
   reset: false,
