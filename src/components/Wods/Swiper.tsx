@@ -23,7 +23,7 @@ export function Swiper({
     });
   });
   const currentChunk = useSlideStore((state) => state.currentChunk);
-  console.log('currentChunk', currentChunk);
+
   return (
     <view class="swiper-wrapper">
       <view class="swiper-container">

@@ -121,7 +121,7 @@ type State = {
 type Action = {
   setSlides: (slides: State['slides']) => void;
 };
-const wods = Array.from({ length: 111 }, (_, i) => {
+const wods = Array.from({ length: 136 }, (_, i) => {
   return new Wod(
     `${i}`,
     `Wod ${i + 1}`,
