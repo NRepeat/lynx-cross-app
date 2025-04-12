@@ -138,9 +138,7 @@ const Wods = () => {
             <view class="control__panel">
               <Buttons name="Filter" onClick={handleOpenModal} />
               <Buttons like>
-                <LikeIcon
-                  wodId={slideState.slides[slideState.currentIndex]?.id}
-                />
+                <LikeIcon wodId={slideState.currentId} />
               </Buttons>
               <Buttons userIcon>
                 <Icon src={user} />

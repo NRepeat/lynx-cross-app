@@ -4,7 +4,7 @@ import whiteHeart from '../Pictures/whiteHeart.png';
 import '../App.css';
 import { useFavWods } from '../hooks/useFavWods.js';
 
-export default function LikeIcon({ wodId }: { wodId: string | undefined }) {
+export default function LikeIcon({ wodId }: { wodId: string | null }) {
   const state = useFavWods();
 
   const [isLiked, setIsLiked] = useState<boolean>(
@@ -13,7 +13,6 @@ export default function LikeIcon({ wodId }: { wodId: string | undefined }) {
 
   const onTap = () => {
     state.addFavWods([wodId as string]);
-    console.log('isLiked', wodId);
     setIsLiked((prev) => {
       if (prev) {
         state.removeFavWods([wodId as string]);

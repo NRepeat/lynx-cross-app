@@ -46,6 +46,7 @@ export function useOffset({
   const { animate, cancel: cancelAnimate } = useAnimate();
   const onCompleteRef = useMainThreadRef<boolean | null>(null);
   const { reset, setReset } = useSlideStore();
+  const state = useSlideStore((state) => state);
   function resetElements(reset: boolean) {
     'main thread';
     if (reset) {
@@ -120,6 +121,12 @@ export function useOffset({
     currentElementRef.current = e.currentTarget;
     touchStartCurrentOffsetRef.current = currentOffsetRef.current;
     currentElementRef.current?.setStyleProperty('transition', ' ');
+    const allItems = lynx.querySelectorAll('.swiper-item');
+    if (dataLength - 1 !== 0 && allItems.length - 1 === currentIndex) {
+      runOnBackground(state.setCurrentChunk)(state.currentChunk + 1);
+    } else if (dataLength - 1 === state.currentChunk) {
+      runOnBackground(state.setCurrentChunk)(0);
+    }
     // cancelAnimate();
   }
 
@@ -167,6 +174,7 @@ export function useOffset({
               calcNearestPage(currentOffsetRef.current) -
                 currentOffsetRef.current,
             );
+          console.log(progress, 'progress');
           const yOffset = initialYOffset * (1 - progress);
           currentOffsetRef.current = offset;
           currentYOffsetRef.current = yOffset;
@@ -187,9 +195,15 @@ export function useOffset({
           if (allItems[currentIndex + 1]) {
             allItems[currentIndex + 1].setAttribute('name', 'first');
             runOnBackground(onIndexUpdate)(Number(currentIndex + 1));
+            runOnBackground(state.setCurrentId)(
+              allItems[currentIndex + 1].getAttribute('idSelector'),
+            );
           } else if (allItems.length - 1 === currentIndex) {
             allItems[0].setAttribute('name', 'first');
             runOnBackground(onIndexUpdate)(0);
+            runOnBackground(state.setCurrentId)(
+              allItems[0].getAttribute('idSelector'),
+            );
           }
           onCompleteRef.current = true;
           const lowerBound = itemWidth;
@@ -197,6 +211,9 @@ export function useOffset({
 
           const normalizedOffset =
             (2 * (offset - upperBound)) / (lowerBound - upperBound) - 1;
+          console.log(currentIndex, 'currentIndex');
+          console.log(dataLength, 'dataLength');
+          console.log('allItems.length', allItems.length);
 
           updateAllItems(currentIndex, Number(normalizedOffset.toFixed(2)));
         }

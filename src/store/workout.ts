@@ -109,12 +109,19 @@ type State = {
     time?: number;
   };
   setFilters: (filters: State['filters']) => void;
+  chunkSize: number;
+  chunkedSlides: number;
+  currentId: string | null;
+  setCurrentId: (id: string | null) => void;
+  currentChunk: number;
+  setCurrentChunk: (currentChunk: number) => void;
+  setChunkedSlides: (chunkedSlides: number) => void;
 };
 
 type Action = {
   setSlides: (slides: State['slides']) => void;
 };
-const wods = Array.from({ length: 100 }, (_, i) => {
+const wods = Array.from({ length: 111 }, (_, i) => {
   return new Wod(
     `${i}`,
     `Wod ${i + 1}`,
@@ -234,18 +241,38 @@ const availableFilters = generateAvailableFilters(wods);
 
 export const useFilteredSlides = () => {
   const { slides, filters } = useSlideStore();
-  return filterWods(slides, filters);
+  const slidesC = chunkArray(filterWods(slides, filters), 5);
+  // setChunkedSlides(slidesC.length);
+  return slidesC;
+};
+
+export const chunkArray = (array: Wod[], chunkSize: number): Wod[][] => {
+  const result: Wod[][] = [];
+  if (array.length < chunkSize) {
+    return [array];
+  }
+  for (let i = 0; i < array.length; i += chunkSize) {
+    result.push(array.slice(i, i + chunkSize));
+  }
+
+  return result;
 };
 
 export const useSlideStore = create<State & Action>((set) => ({
   slides: wods,
   reset: false,
   currentIndex: 0,
+  currentChunk: 0,
+  currentId: null,
+  setCurrentId: (id) => set({ currentId: id }),
+  setCurrentChunk: (currentChunk) => set({ currentChunk }),
   setCurrentIndex: (index) => set({ currentIndex: index }),
   setReset: (reset) => set({ reset }),
   filters: { difficulty: ['Rx'], gender: ['man', 'women'] },
   availableFilters: availableFilters,
   setFilters: (filters) => set({ filters, reset: true }),
-
+  chunkSize: 5,
+  chunkedSlides: 0,
+  setChunkedSlides: (chunkedSlides) => set({ chunkedSlides }),
   setSlides: (slides) => set({ slides }),
 }));
