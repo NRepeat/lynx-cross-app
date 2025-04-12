@@ -53,6 +53,7 @@ export type WorkoutType = {
   weight: WodWightType | null;
 };
 export interface WodType {
+  id: string;
   title: string;
   time: number | null;
   type: WodTypeEnum;
@@ -61,6 +62,7 @@ export interface WodType {
   difficulty?: WodDifficultyType;
 }
 export class Wod implements WodType {
+  id: string;
   title: string;
   description: string | undefined;
   time: number | null;
@@ -70,6 +72,7 @@ export class Wod implements WodType {
   difficulty: WodDifficultyType;
   gender: WodGenderType | undefined;
   constructor(
+    id: string,
     title: string,
     description: string,
     time: number | null,
@@ -79,6 +82,7 @@ export class Wod implements WodType {
     difficulty: WodDifficultyType,
     gender?: WodGenderType,
   ) {
+    this.id = id;
     this.title = title;
     this.description = description;
     this.time = time;
@@ -110,8 +114,9 @@ type State = {
 type Action = {
   setSlides: (slides: State['slides']) => void;
 };
-const wods = Array.from({ length: 115 }, (_, i) => {
+const wods = Array.from({ length: 100 }, (_, i) => {
   return new Wod(
+    `${i}`,
     `Wod ${i + 1}`,
     `Description ${i + 1}`,
     60,
@@ -149,7 +154,6 @@ export const filterWods = (wods: Wod[], filters: State['filters']): Wod[] => {
   }
 
   return wods.filter((wod) => {
-    // Gender filter (fixed typo from 'gander' to 'gender')
     if (
       filters.gender &&
       filters.gender.length > 0 &&
@@ -158,7 +162,6 @@ export const filterWods = (wods: Wod[], filters: State['filters']): Wod[] => {
       return false;
     }
 
-    // Difficulty filter
     if (
       filters.difficulty &&
       filters.difficulty.length > 0 &&
@@ -167,7 +170,6 @@ export const filterWods = (wods: Wod[], filters: State['filters']): Wod[] => {
       return false;
     }
 
-    // WOD type filter
     if (
       filters.wodType &&
       filters.wodType.length > 0 &&
@@ -181,7 +183,6 @@ export const filterWods = (wods: Wod[], filters: State['filters']): Wod[] => {
       return false;
     }
 
-    // Exercise and equipment filters
     if (filters.exercise || filters.equipment) {
       const matchesExerciseFilters = wod.workout.some(({ exercise }) => {
         const exerciseMatch =

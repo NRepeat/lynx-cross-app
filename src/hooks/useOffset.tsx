@@ -120,7 +120,7 @@ export function useOffset({
     currentElementRef.current = e.currentTarget;
     touchStartCurrentOffsetRef.current = currentOffsetRef.current;
     currentElementRef.current?.setStyleProperty('transition', ' ');
-    cancelAnimate();
+    // cancelAnimate();
   }
 
   function handleTouchMove(e: MainThread.TouchEvent) {

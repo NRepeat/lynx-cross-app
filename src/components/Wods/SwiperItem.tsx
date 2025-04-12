@@ -15,6 +15,7 @@ function SwiperItem({
   transform,
   length,
   wod,
+  display,
 }: {
   index: number;
   itemWidth: number;
@@ -23,6 +24,7 @@ function SwiperItem({
   opacity: number;
   length: number;
   wod: Wod;
+  display: string;
 }) {
   const easing = (x: number) => {
     'main thread';
@@ -105,10 +107,9 @@ function SwiperItem({
         width: `${itemWidth}px`,
         height: `${'65vh'}`,
         transform,
-        display: `${index >= 10 ? 'none' : 'block'}`,
+        display: `${display as 'block' | 'none'}`,
         zIndex: `${opacity <= 0 ? -10 : zIndex}`,
         opacity: `${opacity}`,
-        transitionDelay: '1s' as const,
       }}
       className={`swiper-item `}
     >

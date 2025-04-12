@@ -45,7 +45,7 @@ export function useUpdateSwiperStyle() {
           containerRef.current?.setAttribute('open', `false`);
         },
 
-        duration: 1200,
+        duration: 200,
       });
     } else {
       const maxRotation = 10;

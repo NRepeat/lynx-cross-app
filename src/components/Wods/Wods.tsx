@@ -1,6 +1,11 @@
 import type React from 'react';
 import './style.css';
-import { runOnBackground, useEffect, useMainThreadRef } from '@lynx-js/react';
+import {
+  runOnBackground,
+  useEffect,
+  useMainThreadRef,
+  useState,
+} from '@lynx-js/react';
 import type { BaseTouchEvent, MainThread } from '@lynx-js/types';
 import user from '../../assets/user.png';
 import { useAnimate } from '../../hooks/useAnimate.jsx';
@@ -11,13 +16,19 @@ import { useGlobal } from '../../store/global.js';
 import LikeIcon from '../LikeIcon.jsx';
 import Icon from '../ui/Icon.jsx';
 import StartWorkout from './Training.jsx';
+import { useFavWods } from '../../hooks/useFavWods.js';
+import { useSlideStore } from '../../store/workout.js';
 const Wods = () => {
   const { animate, cancel } = useAnimate();
   const touchStartYRef = useMainThreadRef<number>(0);
   const g = useGlobal((state) => state);
+  const slideState = useSlideStore((state) => state);
   const containerRef = useMainThreadRef<MainThread.Element>(null);
   const touchStartCurrentOffsetRef = useMainThreadRef<number>(0);
-  // const [startWorkout, setStartWorkout] = useState(false);
+  // const { getFavWods } = useFavWods();
+  // useEffect(() => {
+  //   getFavWods();
+  // }, []);
   const handleCloseModal = () => {
     'main thread';
 
@@ -61,48 +72,6 @@ const Wods = () => {
     // touchStartCurrentOffsetRef.current = 0;
   };
 
-  const handleMoveDownModal = (e: MainThread.TouchEvent) => {
-    'main thread';
-    const touchMoveY = e.touches[0].clientY;
-
-    const deltaY = touchMoveY - touchStartYRef.current;
-
-    const screenHeight = SystemInfo.pixelHeight;
-
-    const normalizedDeltaY = deltaY / screenHeight; // This will give a value between 0 and 1, scaled by the screen height
-
-    const scaleFactor = 0.1;
-    const scaledDeltaY = normalizedDeltaY * scaleFactor;
-
-    const lowerBound = SystemInfo.pixelHeight / SystemInfo.pixelRatio;
-
-    const offset =
-      touchStartCurrentOffsetRef.current + scaledDeltaY * screenHeight;
-
-    const realOffset = Math.max(0, Math.min(offset, screenHeight - lowerBound));
-
-    containerRef.current?.setStyleProperties({
-      transform: `translateY(${realOffset}px)`,
-    });
-    const hideThreshold = 400;
-    if (realOffset > hideThreshold) {
-      containerRef.current?.setStyleProperties({
-        height: '0vh', // Move it completely off-screen
-        opacity: '0', // Optional: fade out the modal
-        transform: `translateY(0px)`, // Reset the transform
-      });
-
-      touchStartCurrentOffsetRef.current = 0;
-    } else {
-      touchStartCurrentOffsetRef.current = realOffset;
-    }
-  };
-
-  const handleTouchEnd = () => {
-    'main thread';
-    touchStartCurrentOffsetRef.current = 0;
-    touchStartYRef.current = 0;
-  };
   const handleStartWorkout = () => {
     'main thread';
     runOnBackground(g.setWorkoutIsStarted)(true);
@@ -169,7 +138,9 @@ const Wods = () => {
             <view class="control__panel">
               <Buttons name="Filter" onClick={handleOpenModal} />
               <Buttons like>
-                <LikeIcon />
+                <LikeIcon
+                  wodId={slideState.slides[slideState.currentIndex]?.id}
+                />
               </Buttons>
               <Buttons userIcon>
                 <Icon src={user} />

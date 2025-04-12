@@ -13,7 +13,7 @@ export default defineConfig({
     lynx: {},
   },
   dev: {
-    assetPrefix: 'http://192.168.0.100:3000',
+    // assetPrefix: 'http://192.168.0.44:3000',
   },
 
   server: {
